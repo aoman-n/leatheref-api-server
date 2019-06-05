@@ -13,8 +13,14 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out if logged_in?
-    render json: { message: "success log out" }
+    if logged_in?
+      log_out
+      render json: { message: "success log out" }
+    else
+      response_bad_request
+    end
+    # log_out if logged_in?
+    # render json: { message: "success log out" }
   end
 
 end

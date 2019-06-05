@@ -78,10 +78,6 @@ RSpec.describe "Sessions", type: :request do
   describe "ログアウト機能の検証: DELETE /logout" do
     let!(:user) { FactoryBot.create(:user) }
 
-    it "ログインしてなければ..." do
-
-    end
-
     it "ログイン中のユーザーがログアウト出来ること" do
       user_params = FactoryBot.attributes_for(:user)
       post login_path, params: {
@@ -91,11 +87,15 @@ RSpec.describe "Sessions", type: :request do
       }
       login_json = JSON.parse(response.body)
       token = login_json["token"]
-      headers = { "authorization": " Bearer #{token}" }
-      delete logout_path, headers: headers
+      delete logout_path, headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status "200"
       logout_json = JSON.parse(response.body)
       expect(logout_json["message"]).to eq "success log out"
+    end
+
+    it "ログインしてなければ400を返すこと" do
+      delete logout_path
+      expect(response).to have_http_status "400"
     end
   end
 

@@ -19,7 +19,7 @@ module SessionsHelper
   def current_user
     return @current_user if @current_user.present?
     secret = ENV['HMAC_SECRET'] || 'hmac_jwt'
-    return nil if request.headers['Authorization'].blank? or request.headers['Authorization'] !~ /\ABearer .*\z/
+    return nil if request.headers['Authorization'].blank? && request.headers['Authorization'] !~ /\ABearer .*\z/
     token = request.headers['Authorization'].match(/\ABearer (.*)\z/)[1]
     decoded_token = JWT.decode(token, secret, true, { algorithm: 'HS256' }).first
     user = User.find_by(id: decoded_token['user_id'])

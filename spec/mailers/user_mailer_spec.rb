@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe UserMailer, type: :mailer do
 
-  describe "account_activation", focus: true do
+  describe "account_activation" do
     let(:user) { FactoryBot.create(:user, :not_activate) }
     let(:mail) { UserMailer.account_activation(user) }
 
@@ -23,7 +23,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
-  describe "password_reset", focus: true do
+  describe "password_reset" do
     let(:user) { FactoryBot.create(:user) }
     let(:mail) { UserMailer.password_reset(user) }
 
@@ -43,6 +43,7 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.body.encoded).to match(/#{user.reset_token}/)
     end
 
-    it "メール本文にパスワードリセットリンクが存在すること"
+    it "メール本文にパスワードリセットリンクが存在すること" do
+    end
   end
 end

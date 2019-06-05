@@ -16,6 +16,12 @@ class ApplicationController < ActionController::API
 
   private
 
+    def logged_in_user
+      unless logged_in?
+        response_unauthorized
+      end
+    end
+
     # 200 Success
     def response_success(class_name, action_name)
       render status: 200, json: { status: 200, message: "Success #{class_name.capitalize} #{action_name.capitalize}" }
@@ -54,12 +60,6 @@ class ApplicationController < ActionController::API
     def custom_error_500(error = nil)
       logger.error "Rendering 500 with exception: #{error.message}" if error
       render status: 500, json: { status: 500, message: "Internal Server Error #{error}" }
-    end
-
-    def logged_in_user
-      unless logged_in?
-        response_unauthorized
-      end
     end
 
 end

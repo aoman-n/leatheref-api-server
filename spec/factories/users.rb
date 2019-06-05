@@ -38,4 +38,13 @@ FactoryBot.define do
     end
   end
 
+  factory :unactivated_user, class: User do
+    name { 'misokun' }
+    email { 'misokun@example.com' }
+    password { 'password' }
+    password_confirmation { 'password' }
+    admin { false }
+    activated { false }
+  end
+
 end

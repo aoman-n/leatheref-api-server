@@ -11,6 +11,7 @@ class ApplicationController < ActionController::API
   def hello
     puts 'hello!'
     log('log helper')
+    puts Rails.application.credentials.test_key_base
     render json: { text: 'Hello World' }
   end
 

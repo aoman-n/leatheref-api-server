@@ -19,3 +19,5 @@
 vendor/bundle
 
 memo.md
+# Ignore master key for decrypting credentials and more.
+/config/master.key

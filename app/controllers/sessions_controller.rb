@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-
   def create
     user = User.find_by(email: params[:email])
     if user.blank?
@@ -15,12 +14,11 @@ class SessionsController < ApplicationController
   def destroy
     if logged_in?
       log_out
-      render json: { message: "success log out" }
+      render json: { message: 'success log out' }
     else
       response_bad_request
     end
     # log_out if logged_in?
     # render json: { message: "success log out" }
   end
-
 end

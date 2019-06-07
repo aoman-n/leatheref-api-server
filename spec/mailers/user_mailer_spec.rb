@@ -1,49 +1,48 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe UserMailer, type: :mailer do
-
-  describe "account_activation" do
+  describe 'account_activation' do
     let(:user) { FactoryBot.create(:user, :not_activate) }
     let(:mail) { UserMailer.account_activation(user) }
 
-    it "ユーザのメールアドレスに送信すること" do
+    it 'ユーザのメールアドレスに送信すること' do
       expect(mail.to).to eq [user.email]
     end
 
-    it "サポート用のメールアドレスから送信すること" do
-      expect(mail.from).to eq ["support@example.com"]
+    it 'サポート用のメールアドレスから送信すること' do
+      expect(mail.from).to eq ['support@example.com']
     end
 
-    it "正しい件名で送信すること" do
-      expect(mail.subject).to eq "Account activation"
+    it '正しい件名で送信すること' do
+      expect(mail.subject).to eq 'Account activation'
     end
 
-    it "メールにアクティベーショントークンがセットされてること" do
+    it 'メールにアクティベーショントークンがセットされてること' do
       expect(mail.body.encoded).to match(/#{user.activation_token}/)
     end
   end
 
-  describe "password_reset" do
+  describe 'password_reset' do
     let(:user) { FactoryBot.create(:user) }
     let(:mail) { UserMailer.password_reset(user) }
 
-    it "ユーザのメールアドレスに送信すること" do
+    it 'ユーザのメールアドレスに送信すること' do
       expect(mail.to).to eq [user.email]
     end
 
-    it "サポート用のメールアドレスから送信すること" do
-      expect(mail.from).to eq ["support@example.com"]
+    it 'サポート用のメールアドレスから送信すること' do
+      expect(mail.from).to eq ['support@example.com']
     end
 
-    it "正しい件名で送信すること" do
-      expect(mail.subject).to eq "Password reset"
+    it '正しい件名で送信すること' do
+      expect(mail.subject).to eq 'Password reset'
     end
 
-    it "メールにリセットトークンがセットされてること" do
+    it 'メールにリセットトークンがセットされてること' do
       expect(mail.body.encoded).to match(/#{user.reset_token}/)
     end
 
-    it "メール本文にパスワードリセットリンクが存在すること" do
+    it 'メール本文にパスワードリセットリンクが存在すること' do
     end
   end
 end

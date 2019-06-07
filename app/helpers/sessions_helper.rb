@@ -1,7 +1,6 @@
 require 'jwt'
 
 module SessionsHelper
-
   def log(string)
     puts string
   end
@@ -21,12 +20,10 @@ module SessionsHelper
     secret = ENV['HMAC_SECRET'] || 'hmac_jwt'
     return nil if request.headers['Authorization'].blank? && request.headers['Authorization'] !~ /\ABearer .*\z/
     token = request.headers['Authorization'].match(/\ABearer (.*)\z/)[1]
-    decoded_token = JWT.decode(token, secret, true, { algorithm: 'HS256' }).first
+    decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256').first
     user = User.find_by(id: decoded_token['user_id'])
     if user && user.activated? && user.authenticated?(:remember, decoded_token['token'])
       @current_user = user
-    else
-      nil
     end
   end
 
@@ -43,5 +40,4 @@ module SessionsHelper
   # def current_user?(user)
   #   user == current_user
   # end
-
 end

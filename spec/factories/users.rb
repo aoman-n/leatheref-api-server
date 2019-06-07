@@ -18,7 +18,6 @@
 #
 
 FactoryBot.define do
-
   factory :user, class: User do
     name { 'hogekun' }
     email { 'hogekun@example.com' }
@@ -46,5 +45,4 @@ FactoryBot.define do
     admin { false }
     activated { false }
   end
-
 end

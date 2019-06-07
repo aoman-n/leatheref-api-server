@@ -12,7 +12,6 @@
 #                         PUT    /password_resets/:id(.:format)          password_resets#update
 
 Rails.application.routes.draw do
-
   root to: 'application#hello'
 
   scope :api do
@@ -26,7 +25,6 @@ Rails.application.routes.draw do
       end
     end
     resources :account_activations, only: [:edit]
-    resources :password_resets, only: [:create, :update]
+    resources :password_resets, only: %i[create update]
   end
-
 end

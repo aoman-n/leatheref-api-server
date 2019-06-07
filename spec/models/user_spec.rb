@@ -20,13 +20,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-
-  it "有効な名前、Emailアドレス、パスワード、パスワード確認があればUserを作成出来ること" do
+  it '有効な名前、Emailアドレス、パスワード、パスワード確認があればUserを作成出来ること' do
     user = User.new(
-      name: "Aoba",
-      email: "aobatest@example.com",
-      password: "password",
-      password_confirmation: "password"
+      name: 'Aoba',
+      email: 'aobatest@example.com',
+      password: 'password',
+      password_confirmation: 'password'
     )
     expect(user).to be_valid
   end
@@ -41,22 +40,22 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_secure_password }
   it { is_expected.to validate_length_of(:password).is_at_least(6) }
 
-  it "emailが小文字に変換後DBに保存されること" do
+  it 'emailが小文字に変換後DBに保存されること' do
     user = FactoryBot.create(:user, email: 'ExamPle@example.com')
-    expect(user.reload.email).to eq "example@example.com"
+    expect(user.reload.email).to eq 'example@example.com'
   end
 
-  describe "アドレスのフォーマットチェック" do
+  describe 'アドレスのフォーマットチェック' do
     # ユーザーのパラメータを仕込み、各テストでemailを上書きする。
     before do
       @user_params = FactoryBot.attributes_for(:user)
     end
 
-    context "有効なアドレスの時" do
+    context '有効なアドレスの時' do
       valid_addresses = [
-        "example+1@example.com",
-        "example-1@example.com",
-        "example_1@example.com"
+        'example+1@example.com',
+        'example-1@example.com',
+        'example_1@example.com'
       ]
       valid_addresses.each do |valid_address|
         it "アドレスが[#{valid_address}]" do
@@ -67,15 +66,15 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context "無効なアドレスの時" do
+    context '無効なアドレスの時' do
       invalid_addresses = [
-        "user@example,com",
-        "user_at_foo.org",
-        "user.name@example.",
-        "foo@bar_baz.com",
-        "foo@bar+baz.com",
-        "foo@bar..co",
-        "foo@bar@piyo"
+        'user@example,com',
+        'user_at_foo.org',
+        'user.name@example.',
+        'foo@bar_baz.com',
+        'foo@bar+baz.com',
+        'foo@bar..co',
+        'foo@bar@piyo'
       ]
       invalid_addresses.each do |invalid_address|
         it "アドレスが[#{invalid_address}]" do
@@ -88,10 +87,10 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "メソッドのテスト" do
+  describe 'メソッドのテスト' do
     let(:user) { FactoryBot.build(:user) }
 
-    it "#remember, #forget" do
+    it '#remember, #forget' do
       expect(user.remember_digest).to eq nil
       user.remember
       expect(user.remember_digest).to_not eq nil
@@ -99,5 +98,4 @@ RSpec.describe User, type: :model do
       expect(user.remember_digest).to eq nil
     end
   end
-
 end

@@ -1,0 +1,12 @@
+{
+  "ruby.lint": {
+    "rubocop": true
+  },
+  "editor.formatOnSaveTimeout": 5000,
+  "editor.formatOnSave": true,
+  "ruby.format": "rubocop",
+  "ruby.rubocop.onSave": true
+  // "ruby.rubocop.executePath": "",
+  // "ruby.rubocop.onSave": true,
+  // "ruby.rubocop.configFilePath": "",
+}

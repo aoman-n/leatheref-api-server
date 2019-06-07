@@ -23,7 +23,10 @@ class ApplicationController < ActionController::API
 
   # 200 Success
   def response_success(class_name, action_name)
-    render status: 200, json: { status: 200, message: "Success #{class_name.capitalize} #{action_name.capitalize}" }
+    render status: 200, json: {
+      status: 200,
+      message: "Success #{class_name.capitalize} #{action_name.capitalize}",
+    }
   end
 
   # 400 Bad Request
@@ -37,11 +40,11 @@ class ApplicationController < ActionController::API
   end
 
   # 404 Not Found
-  def response_not_found(class_name = 'page')
+  def response_not_found(class_name: 'page')
     render status: 404, json: { status: 404, message: "#{class_name.capitalize} Not Found" }
   end
 
-  def custom_error_404(error = nil)
+  def custom_error_404(error: nil)
     logger.info "Rendering 404 with exception: #{error.message}" if error
     render status: 404, json: { status: 404, message: 'Not Found' }
   end
@@ -56,7 +59,7 @@ class ApplicationController < ActionController::API
     render status: 500, json: { status: 500, message: 'Internal Server Error' }
   end
 
-  def custom_error_500(error = nil)
+  def custom_error_500(error: nil)
     logger.error "Rendering 500 with exception: #{error.message}" if error
     render status: 500, json: { status: 500, message: "Internal Server Error #{error}" }
   end

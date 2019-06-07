@@ -55,7 +55,7 @@ RSpec.describe User, type: :model do
       valid_addresses = [
         'example+1@example.com',
         'example-1@example.com',
-        'example_1@example.com'
+        'example_1@example.com',
       ]
       valid_addresses.each do |valid_address|
         it "アドレスが[#{valid_address}]" do
@@ -74,12 +74,12 @@ RSpec.describe User, type: :model do
         'foo@bar_baz.com',
         'foo@bar+baz.com',
         'foo@bar..co',
-        'foo@bar@piyo'
+        'foo@bar@piyo',
       ]
       invalid_addresses.each do |invalid_address|
         it "アドレスが[#{invalid_address}]" do
           user_params = @user_params.merge!(email: invalid_address)
-          user = User.new(@user_params)
+          user = User.new(user_params)
           user.valid?
           expect(user.errors[:email]).to_not be_empty
         end

@@ -10,7 +10,7 @@ RSpec.describe 'Sessions', type: :request do
         post login_path, params: {
           email: 'gestuser@example.com',
           password: 'password',
-          password_confirmation: 'password'
+          password_confirmation: 'password',
         }
         expect(response).to have_http_status '404'
       end
@@ -22,7 +22,7 @@ RSpec.describe 'Sessions', type: :request do
         post login_path, params: {
           email: user_params[:email],
           password: user_params[:password],
-          password_confirmation: user_params[:password]
+          password_confirmation: user_params[:password],
         }
         expect(response).to have_http_status '401'
       end
@@ -37,7 +37,7 @@ RSpec.describe 'Sessions', type: :request do
         post login_path, params: {
           email: @user_params[:email],
           password: @user_params[:password],
-          password_confirmation: @user_params[:password]
+          password_confirmation: @user_params[:password],
         }
         expect(response).to have_http_status '200'
         json = JSON.parse(response.body)
@@ -48,7 +48,7 @@ RSpec.describe 'Sessions', type: :request do
         post login_path, params: {
           email: @user_params[:email],
           passowrd: 'hogege',
-          password_confirmation: @user_params[:password]
+          password_confirmation: @user_params[:password],
         }
         expect(response).to have_http_status '401'
       end
@@ -57,7 +57,7 @@ RSpec.describe 'Sessions', type: :request do
         post login_path, params: {
           email: @user_params[:email],
           passowrd: @user_params[:password],
-          password_confirmation: 'hogegen'
+          password_confirmation: 'hogegen',
         }
         expect(response).to have_http_status '401'
       end
@@ -66,7 +66,7 @@ RSpec.describe 'Sessions', type: :request do
         post login_path, params: {
           email: 'hogege@example.com',
           passowrd: @user_params[:password],
-          password_confirmation: @user_params[:password_confirmation]
+          password_confirmation: @user_params[:password_confirmation],
         }
         expect(response).to have_http_status '404'
       end
@@ -81,7 +81,7 @@ RSpec.describe 'Sessions', type: :request do
       post login_path, params: {
         email: user_params[:email],
         password: user_params[:password],
-        password_confirmation: user_params[:password]
+        password_confirmation: user_params[:password],
       }
       login_json = JSON.parse(response.body)
       token = login_json['token']

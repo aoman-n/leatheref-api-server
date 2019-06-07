@@ -1,5 +1,5 @@
 class PasswordResetsController < ApplicationController
-  before_action :get_user, only: %i[create update]
+  before_action :fetch_user, only: %i(create update)
   before_action :valid_user, only: :update
   before_action :check_expiration, only: :update
 
@@ -27,7 +27,7 @@ class PasswordResetsController < ApplicationController
 
   private
 
-  def get_user
+  def fetch_user
     @user = User.find_by(email: params[:email])
   end
 

@@ -8,11 +8,11 @@ RSpec.describe 'Users API', type: :request do
         name: 'example',
         email: 'example@example.com',
         password: 'password',
-        password_confirmation: 'password'
+        password_confirmation: 'password',
       }
       expect do
         post users_path, params: user_params
-      end.to change { User.count }.by(1)
+      end.to change(User, :count).by(1)
       expect(UserMailer).to have_received(:account_activation)
       expect(response).to have_http_status '200'
     end
@@ -24,11 +24,11 @@ RSpec.describe 'Users API', type: :request do
         name: '',
         email: 'example@example.com',
         password: 'password',
-        password_confirmation: 'password'
+        password_confirmation: 'password',
       }
       expect do
         post users_path, params: user_params
-      end.to change { User.count }.by(0)
+      end.to change(User, :count).by(0)
       expect(response).to have_http_status '401'
     end
   end

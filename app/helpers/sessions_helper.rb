@@ -10,7 +10,7 @@ module SessionsHelper
     user.remember
     payload = {
       user_id: user.id,
-      token: user.remember_token
+      token: user.remember_token,
     }
     JWT.encode payload, secret, 'HS256'
   end
@@ -22,9 +22,7 @@ module SessionsHelper
     token = request.headers['Authorization'].match(/\ABearer (.*)\z/)[1]
     decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256').first
     user = User.find_by(id: decoded_token['user_id'])
-    if user && user.activated? && user.authenticated?(:remember, decoded_token['token'])
-      @current_user = user
-    end
+    @current_user = user if user && user.activated? && user.authenticated?(:remember, decoded_token['token'])
   end
 
   def logged_in?
@@ -36,7 +34,6 @@ module SessionsHelper
     @current_user = nil
   end
 
-  # 渡されたユーザーがログイン済みユーザーであればtrueを返す
   # def current_user?(user)
   #   user == current_user
   # end

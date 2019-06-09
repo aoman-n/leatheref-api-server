@@ -8,5 +8,5 @@
   "ruby.rubocop.onSave": true,
   // "ruby.rubocop.executePath": "",
   // "ruby.rubocop.onSave": true,
-  "ruby.rubocop.configFilePath": "/Users/aoba/dev/projects/leatheref-env/leatheref-api-server/.rubocop.yml"
+  // "ruby.rubocop.configFilePath": ""
 }

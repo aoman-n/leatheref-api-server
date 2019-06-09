@@ -8,19 +8,19 @@
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleAlignWith, AutoCorrect, Severity.
-# SupportedStylesAlignWith: start_of_line, def
-Layout/DefEndAlignment:
-  Exclude:
-    - "app/controllers/users_controller.rb"
+# # SupportedStylesAlignWith: start_of_line, def
+# Layout/DefEndAlignment:
+#   Exclude:
+#     - "app/controllers/users_controller.rb"
 
 # Offense count: 1
 # Configuration parameters: CustomIncludeMethods.
-RSpec/EmptyExampleGroup:
-  Exclude:
-    - "spec/controllers/users_controller_spec.rb"
+# RSpec/EmptyExampleGroup:
+#   Exclude:
+#     - "spec/controllers/users_controller_spec.rb"
 
 # Offense count: 3
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
-Metrics/LineLength:
-  Max: 112
+# Metrics/LineLength:
+#   Max: 112

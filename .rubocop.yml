@@ -28,3 +28,6 @@ Style/AsciiComments:
 
 RSpec/NotToNot:
   Enabled: false
+
+Airbnb/OptArgParameters:
+  Enabled: false

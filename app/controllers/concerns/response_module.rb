@@ -22,11 +22,11 @@ module ResponseModule
   end
 
   # 404 Not Found
-  def response_not_found(class_name: 'page')
+  def response_not_found(class_name = 'page')
     render status: 404, json: { status: 404, message: "#{class_name.capitalize} Not Found" }
   end
 
-  def custom_error_404(error: nil)
+  def custom_error_404(error = nil)
     logger.info "Rendering 404 with exception: #{error.message}" if error
     render status: 404, json: { status: 404, message: 'Not Found' }
   end
@@ -41,7 +41,7 @@ module ResponseModule
     render status: 500, json: { status: 500, message: 'Internal Server Error' }
   end
 
-  def custom_error_500(error: nil)
+  def custom_error_500(error = nil)
     logger.error "Rendering 500 with exception: #{error.message}" if error
     render status: 500, json: { status: 500, message: "Internal Server Error #{error}" }
   end

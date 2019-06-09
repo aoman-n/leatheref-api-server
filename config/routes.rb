@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   scope :api do
     get '/hello', to: 'application#hello'
+    get '/auth/:provider/callback', to: 'sessions#create'
     post '/login', to: 'sessions#create'
     delete '/logout', to: 'sessions#destroy'
 

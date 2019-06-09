@@ -1,13 +1,21 @@
 class SessionsController < ApplicationController
   def create
-    user = User.find_by(email: params[:email])
-    if user.blank?
-      response_not_found(:user)
-    elsif user.authenticate(params[:password]) && user.activated?
-      token = create_token_for_login(user)
-      render json: { token: token }
+    auth = request.env['omniauth.auth']
+    if auth.present?
+      user = User.find_or_create_from_auth(request.env['omniauth.auth'])
+      user.activate unless user.activated?
+      j_token = create_token_for_login(user)
+      render json: { token: j_token }
     else
-      response_unauthorized
+      user = User.find_by(email: params[:email])
+      if user.blank?
+        response_not_found(:user)
+      elsif user.authenticate(params[:password]) && user.activated?
+        j_token = create_token_for_login(user)
+        render json: { token: j_token }
+      else
+        response_unauthorized
+      end
     end
   end
 

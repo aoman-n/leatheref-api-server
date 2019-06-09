@@ -16,6 +16,8 @@ gem 'jwt'
 gem 'rack-attack'
 gem 'rack-cors'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'omniauth'
+gem 'omniauth-twitter'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

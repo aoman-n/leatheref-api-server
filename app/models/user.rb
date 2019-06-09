@@ -25,15 +25,30 @@ class User < ApplicationRecord
   before_create :create_activation_digest
   before_save :downcase_email
 
-  has_secure_password
+  has_secure_password validations: false
 
-  validates :name, presence: true, length: { maximum: 20 }
-  validates :email, uniqueness: true
+  validates :name, presence: true, length: { maximum: 20 }, unless: :uid?
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-  validates :email, presence: true, length: { maximum: 250 },
+  validates :email, presence: true,
+                    length: { maximum: 250 },
                     format: { with: VALID_EMAIL_REGEX },
-                    uniqueness: { case_sensitive: false }
-  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+                    uniqueness: { case_sensitive: false },
+                    unless: :uid?
+  validates :password, presence: true,
+                       length: { minimum: 6 },
+                       allow_nil: true,
+                       unless: :uid?
+
+  def self.find_or_create_from_auth(auth)
+    provider = auth[:provider]
+    uid = auth[:uid]
+    name = auth[:info][:name]
+    image = auth[:info][:image]
+    find_or_create_by(provider: provider, uid: uid) do |user|
+      user.name = name
+      user.image_url = image
+    end
+  end
 
   def self.digest(string)
     cost =
@@ -93,6 +108,6 @@ class User < ApplicationRecord
   private
 
   def downcase_email
-    email.downcase!
+    email.downcase! if email.present?
   end
 end

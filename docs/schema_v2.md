@@ -7,8 +7,8 @@ Model: **User**
 - has_one :profile
 - has_many :follows
 - has_many :direct_messages
-- has_many :microposts
-- has_many :comments
+- has_many :reviews
+- has_many :tweets
 - has_many :favorites
 - has_many :micropost_likes
 - has_many :communities
@@ -33,6 +33,7 @@ Model: **User**
 |updatee_at|datetime|||
 |uid|string||twitter OAuthで使用|
 |provider|string||twitter OAuthで使用|
+|access_count|integer||他ユーザーにレビューを表示された数|
 
 ### profiles
 ユーザーの補足情報
@@ -86,10 +87,20 @@ Model: **DirectMessage**
 |text|text||
 |picture|string||
 
-### microposts
-メイン投稿
+### stores
+コンビニ社の管理テーブル
 
-Model: **Micropost**
+Model: Store
+- has_many :reviews
+
+|column|type...|options|comment|
+|---|---|---|---|
+|name|string|null: false||
+
+### reviews
+レビューの投稿テーブル
+
+Model: **Review**
 - belogs_to :user
 - has_many :comments
 - has_many :microposts_tags
@@ -97,34 +108,40 @@ Model: **Micropost**
 - has_many :favorites
 - has_many :micropost_likes
 
-|column|type...|options|
-|---|---|---|
-|user_id(FK)|integer||
-|content|text||
-|picture|string||
-|price|integer||
-|brand|string||
+|column|type...|options|comment|
+|---|---|---|---|
+|user_id(FK)|integer|null: false||
+|store_id(FK)|integer|null: false||
+|content|text|||
+|picture|string|||
+|price|integer|||
+|rating|integer|1~5||
+|stamp|integer|enum{1: 神}|本当に美味しかった場合のみ押すスタンプ|
 
-### comments
+### tweets
 投稿へのコメントやつぶやき
 
-Model: **Comment**
+Model: **Tweet**
 - belongs_to :user
-- belongs_to :micropost
+- belongs_to :review
+- has_many :reply, class: "Tweet", foreign_key: "super_tweet_id"
+- belongs_to :super_tweet, class_name: "Tweet"
+参考: https://railsguides.jp/association_basics.html (2.10自己結合)
 
-|column|type...|options|
-|---|---|---|
-|user_id(FK)|integer||
-|micropost_id(FK)|integer||
+|column|type...|options|comment|
+|---|---|---|---|
+|user_id(FK)|integer|||
+|review_id(FK)|integer|||
+|super_tweet_id(FK)|integer||自己結合|
 |texr|text||
 |image|string||
-|type|integer|enum -> (0: normal,1: reply,2: tweet)|
+|type|integer|enum -> (0: review, 1: reply, 2: super_tweet)|
 
-### microposts_tags
+### reviews_tags
 メイン投稿とタグのリレーション
 
-Model: **MicropostTag**
-- belogs_to :micropost
+Model: **ReviewTag**
+- belogs_to :review
 - belogs_to :tag
 
 |column|type...|options|
@@ -132,8 +149,8 @@ Model: **MicropostTag**
 |micropost_id(FK)|integer||
 |tag_id(FK)|integer||
 
-### tags(microposts)
-メイン投稿のタグ
+### r_tags(review)
+レビューのタグ
 
 Model: **Tag**
 - has_many :microposts_tags
@@ -162,16 +179,16 @@ Model: **Favorite**
 |from_user_id(FK)|integer||
 |to_user_id(FK)|integer||
 
-### micropost_likes
+### review_likes
 投稿へのいいね！
 
-Model: **MicropostLike**
-- belogs_to :micropost
+Model: **ReviewLike**
+- belogs_to :review
 - belogs_to :user
 
 |column|type|options|
 |---|---|---|
-|micropost_id(FK)|integer||
+|review_id(FK)|integer||
 |user_id(FK)|integer||
 
 ### communities

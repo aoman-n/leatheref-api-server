@@ -3,14 +3,13 @@
 ### users
 ユーザーの情報
 
-Model: **User**
 - has_one :profile
 - has_many :follows
 - has_many :direct_messages
 - has_many :reviews
 - has_many :tweets
 - has_many :favorites
-- has_many :micropost_likes
+- has_many :review_likes
 - has_many :communities
 - has_many :community_conversations
 - has_many :topics
@@ -18,7 +17,7 @@ Model: **User**
 
 |column|type...|options|desc|
 |---|---|---|---|
-|name|string|not null||
+|display_name|string|not null||
 |email|string|||
 |image_url|string|||
 |password_digest|string|||
@@ -38,7 +37,6 @@ Model: **User**
 ### profiles
 ユーザーの補足情報
 
-Modle: **Profile**
 - belongs_to :prefecture
 
 |column|type|options||
@@ -53,12 +51,11 @@ Modle: **Profile**
 ### prefectures
 都道府県だよん
 
-Model: **Prefecture**
 - has_many :profiles
 
 |column|type|options|
 |---|---|---|
-|prefecture_name||
+|prefecture_name||n
 |prefecture_name_kana||
 
 ### follows
@@ -76,7 +73,6 @@ Model: **Follow**
 ### direct_messages
 ユーザー間のダイレクトメッセージの保存
 
-Model: **DirectMessage**
 - belongs_to :sender, class_name: "User"
 - belongs_to :receiver, class_name: "User"
 
@@ -100,47 +96,63 @@ Model: Store
 ### reviews
 レビューの投稿テーブル
 
-Model: **Review**
 - belogs_to :user
 - has_many :comments
-- has_many :microposts_tags
-- has_many :tags, through: :microposts_tags
+- has_many :reviews_tags
+- has_many :tags, through: :reviews_tags
 - has_many :favorites
-- has_many :micropost_likes
+- has_many :reviews_stamps
+- has_many :stamps, through: :reviews_stamps
 
 |column|type...|options|comment|
 |---|---|---|---|
 |user_id(FK)|integer|null: false||
 |store_id(FK)|integer|null: false||
-|content|text|||
+|product_name|string|null: false||
+|text|text|||
 |picture|string|||
 |price|integer|||
 |rating|integer|1~5||
-|stamp|integer|enum{1: 神}|本当に美味しかった場合のみ押すスタンプ|
+|stamp_count||
 
-### tweets
-投稿へのコメントやつぶやき
+### reviews_stamps(relation)
 
-Model: **Tweet**
+- belogs_to :review
+- belogs_to :stamp
+
+|column|type|options|
+|---|---|---|
+|review_id(FK)|integer||
+|stamp_id(FK)|integer||
+
+### stamps
+投稿へのスタンプ
+
+- has_many :reviews_stamps
+- has_many :reviews, through: :reviews_stamps
+
+### comments
+投稿へのコメント
+
 - belongs_to :user
 - belongs_to :review
-- has_many :reply, class: "Tweet", foreign_key: "super_tweet_id"
-- belongs_to :super_tweet, class_name: "Tweet"
+- has_many :replies, class: "Comment", foreign_key: "in_reply_to_id"
+- belongs_to :in_reply_to, class_name: "Comment"
 参考: https://railsguides.jp/association_basics.html (2.10自己結合)
+- belongs_to :in_reply_to_user, class_name: "User"
 
 |column|type...|options|comment|
 |---|---|---|---|
 |user_id(FK)|integer|||
 |review_id(FK)|integer|||
-|super_tweet_id(FK)|integer||自己結合|
-|texr|text||
-|image|string||
-|type|integer|enum -> (0: review, 1: reply, 2: super_tweet)|
+|in_reply_to_id(FK)|integer||自己結合|
+|text|text|||
+|reply|boolean|||
+|in_reply_to_user_id(FK)|integer||リプライするコメントをしたユーザーを識別|
 
 ### reviews_tags
 メイン投稿とタグのリレーション
 
-Model: **ReviewTag**
 - belogs_to :review
 - belogs_to :tag
 
@@ -149,28 +161,35 @@ Model: **ReviewTag**
 |micropost_id(FK)|integer||
 |tag_id(FK)|integer||
 
-### r_tags(review)
+### tags(review)
 レビューのタグ
 
-Model: **Tag**
-- has_many :microposts_tags
-- has_many :microposts, through: :microposts_tags
+- has_many :reviews_tags
+- has_many :reviews, through: :reviews_tags
 
 |column|type|options|
 |---|---|---|
 |name|string|not null|
 
+### product_categories
+商品のカテゴリー
+
+- has_many :reviews
+
+|column|type...|options|
+|---|---|---|
+|product_category_name|string|not null|
+
 ### favorites(WIP)
 お気に入り投稿
 
-Model: **Favorite**
 - belogs_to :user
 - belogs_to :micropost
 
 |column|type|options|
 |---|---|---|
 |user_id(FK)||
-|micropost_id(FK)||
+|review_id(FK)||
 
 ### replies(WIP)
 
@@ -179,22 +198,9 @@ Model: **Favorite**
 |from_user_id(FK)|integer||
 |to_user_id(FK)|integer||
 
-### review_likes
-投稿へのいいね！
-
-Model: **ReviewLike**
-- belogs_to :review
-- belogs_to :user
-
-|column|type|options|
-|---|---|---|
-|review_id(FK)|integer||
-|user_id(FK)|integer||
-
 ### communities
 コミュニティ
 
-Model: **Community**
 - belogs_to :owner, class_name: "User"
 - belogs_to :category
 - has_many :community_conversations
@@ -222,7 +228,6 @@ Model: **Category**
 ### community_conversations
 コミュニティに対する全体投稿
 
-Model: **CommunityConversation**
 - belogs_to :community
 - belogs_to :user
 
@@ -236,7 +241,6 @@ Model: **CommunityConversation**
 ### topics
 コミュニティのトピック
 
-Model: **Topic**
 - belogs_to :community
 - belogs_to :owner, class_name: "User"
 - has_many :topic_messages
@@ -250,7 +254,6 @@ Model: **Topic**
 ### topic_messages
 コミュニティのトピック内のメッセージ
 
-Model: **TopicMessage**
 - belogs_to :user
 - belogs_to :topic
 

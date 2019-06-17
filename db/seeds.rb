@@ -1,13 +1,34 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-
 [
   'セブン-イレブン',
   'ファミリーマート',
   'ローソン',
-].each {|n| Store.create!({ name: n })}
+].each { |n| Store.create!({ name: n }) }
+
+[
+  'おにぎり',
+  'お寿司',
+  'お弁当',
+  'チルド弁当',
+  'そば・うどん・中華麺',
+  'スパゲティ・パスタ',
+  'グラタン・ドリア',
+  'サンドイッチ・ロールパン',
+  'パン',
+  '惣菜',
+  'サラダ',
+  'アイス・フローズン',
+  '冷凍食品',
+  '焼き菓子',
+  '洋菓子',
+  '和菓子',
+  'お菓子',
+  '加工食品(カップラーメン等)',
+  '飲料',
+  'お酒',
+  'スイーツ',
+  'ドーナツ',
+  '揚げ物・フランク',
+  'おでん',
+  '中華まん',
+  'その他・雑貨',
+].each { |n| ProductCategory.create!({ name: n }) }

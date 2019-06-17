@@ -96,7 +96,9 @@ Model: Store
 ### reviews
 レビューの投稿テーブル
 
-- belogs_to :user
+- belongs_to :user
+- belongs_to :store
+- belongs_to :product_category
 - has_many :comments
 - has_many :reviews_tags
 - has_many :tags, through: :reviews_tags

@@ -2,10 +2,10 @@
 #
 # Table name: users
 #
-#  id                :bigint(8)        not null, primary key
-#  email             :string(255)      not null
+#  id                :bigint           not null, primary key
+#  email             :string(255)
 #  name              :string(255)      not null
-#  password_digest   :string(255)      not null
+#  password_digest   :string(255)
 #  remember_digest   :string(255)
 #  admin             :boolean          default(FALSE)
 #  activation_digest :string(255)
@@ -15,6 +15,9 @@
 #  reset_sent_at     :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  uid               :string(255)
+#  provider          :string(255)
+#  image_url         :string(255)
 #
 
 require 'rails_helper'

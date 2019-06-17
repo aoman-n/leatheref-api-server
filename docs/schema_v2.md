@@ -7,7 +7,7 @@
 - has_many :follows
 - has_many :direct_messages
 - has_many :reviews
-- has_many :tweets
+- has_many :comments
 - has_many :favorites
 - has_many :review_likes
 - has_many :communities

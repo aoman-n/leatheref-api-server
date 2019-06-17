@@ -108,6 +108,7 @@ Model: Store
 |---|---|---|---|
 |user_id(FK)|integer|null: false||
 |store_id(FK)|integer|null: false||
+|product_category_id|integer|null: false||
 |product_name|string|null: false||
 |content|text|||
 |picture|string|||
@@ -176,9 +177,9 @@ Model: Store
 
 - has_many :reviews
 
-|column|type...|options|
-|---|---|---|
-|product_category_name|string|not null|
+|column|type...|options|comment|
+|---|---|---|---|
+|name|string|not null||
 
 ### favorites(WIP)
 お気に入り投稿
@@ -190,13 +191,6 @@ Model: Store
 |---|---|---|
 |user_id(FK)||
 |review_id(FK)||
-
-### replies(WIP)
-
-|column|type|options|
-|---|---|---|
-|from_user_id(FK)|integer||
-|to_user_id(FK)|integer||
 
 ### communities
 コミュニティ

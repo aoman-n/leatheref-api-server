@@ -109,7 +109,7 @@ Model: Store
 |user_id(FK)|integer|null: false||
 |store_id(FK)|integer|null: false||
 |product_name|string|null: false||
-|text|text|||
+|content|text|||
 |picture|string|||
 |price|integer|||
 |rating|integer|1~5||

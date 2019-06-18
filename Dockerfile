@@ -1,8 +1,9 @@
 FROM ruby:2.5.1
 
 RUN apt-get update -qq && \
-    apt-get install -y build-essential nodejs && \
-    apt-get install -y vim
+  apt-get install -y build-essential nodejs && \
+  apt-get install -y vim \
+  imagemagick
 RUN mkdir /app
 WORKDIR /app
 COPY Gemfile /app/Gemfile

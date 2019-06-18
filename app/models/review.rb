@@ -20,4 +20,6 @@ class Review < ApplicationRecord
   belongs_to :user
   belongs_to :store
   belongs_to :product_category
+
+  scope :recent, -> { order(created_at: :desc) }
 end

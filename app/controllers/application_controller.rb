@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
 
   private
 
-  def logged_in_user
+  def authenticate!
     response_unauthorized unless logged_in?
   end
 end

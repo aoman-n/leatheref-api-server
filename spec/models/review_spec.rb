@@ -19,5 +19,15 @@
 require 'rails_helper'
 
 RSpec.describe Review, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'バリデーションのテスト' do
+    # product_name
+    it { is_expected.to validate_presence_of :product_name }
+    it { is_expected.to validate_length_of(:product_name).is_at_least(4) }
+    # content
+    it { is_expected.to validate_presence_of :content }
+    it { is_expected.to validate_length_of(:content).is_at_most(500) }
+    # rating
+    it { is_expected.to validate_presence_of :rating }
+    it { is_expected.to validate_inclusion_of(:rating).in_range(1..10) }
+  end
 end

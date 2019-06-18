@@ -18,13 +18,11 @@
 
 FactoryBot.define do
   factory :review do
-    product_name { "MyString" }
-    content { "MyText" }
-    picture { "MyString" }
-    price { 1 }
-    rating { 1 }
-    stamp_count { 1 }
-    user { nil }
-    store { nil }
+    product_name { "review01" }
+    content { "sample reveiw" }
+    price { 1000 }
+    rating { 5 }
+    association :user
+    store_id { 1 }
   end
 end

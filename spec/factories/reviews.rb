@@ -18,11 +18,12 @@
 
 FactoryBot.define do
   factory :review do
-    product_name { "review01" }
-    content { "sample reveiw" }
+    sequence(:product_name) { |n| "test name #{n}" }
+    sequence(:content) { |n| "sample review content #{n}" }
     price { 1000 }
     rating { 5 }
     association :user
     store_id { 1 }
+    product_category_id { 1 }
   end
 end

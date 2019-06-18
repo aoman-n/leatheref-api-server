@@ -18,6 +18,9 @@
 # bundle files
 vendor/bundle
 
+# upload files
+public/uploads/**/*
+
 memo.md
 # Ignore master key for decrypting credentials and more.
 /config/master.key

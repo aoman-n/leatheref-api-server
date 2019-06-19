@@ -31,6 +31,10 @@ class Review < ApplicationRecord
 
   scope :recent, -> { order(created_at: :desc) }
 
+  def picture_path
+    picture.url
+  end
+
   private
 
   # アップロードされた画像のサイズをバリデーションする

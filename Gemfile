@@ -18,9 +18,16 @@ gem 'rack-cors'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'omniauth'
 gem 'omniauth-twitter'
-gem 'carrierwave'
-gem 'fog-aws'
-gem 'mini_magick'
+
+# 下記warnが出るため、一旦バージョンを指定したfogを使用する
+# backend_1  | [fog][DEPRECATION] Fog::Storage::AWS is deprecated, please use Fog::AWS::Storage.
+# backend_1  | [fog][WARNING] Unrecognized arguments: aws_access_key_id, aws_secret_access_key, region
+# gem 'carrierwave'
+# gem 'fog-aws'
+# gem 'mini_magick'
+gem 'carrierwave', '1.2.2'
+gem 'mini_magick', '4.7.0'
+gem 'fog', '1.42'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

@@ -5,10 +5,8 @@ class ReviewsController < ApplicationController
 
   def index
     per_page = params[:per_page] ||= 10
-    reviews = Review.page(params[:page] ||= 1).per(per_page).recent
-    page_count = (Review.count / per_page.to_f).ceil
-    response.set_header('Total-Count', page_count)
-    render json: { reviews: reviews }
+    reviews = paginate Review.page(params[:page] ||= 1).per(per_page).recent
+    render json: reviews
   end
 
   def show

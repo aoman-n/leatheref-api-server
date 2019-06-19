@@ -4,7 +4,10 @@ class ReviewsController < ApplicationController
   before_action :review_owner?, only: %i(update destroy)
 
   def index
-    reviews = Review.recent
+    per_page = params[:per_page] ||= 10
+    reviews = Review.page(params[:page] ||= 1).per(per_page).recent
+    page_count = (Review.count / per_page.to_f).ceil
+    response.set_header('Total-Count', page_count)
     render json: { reviews: reviews }
   end
 

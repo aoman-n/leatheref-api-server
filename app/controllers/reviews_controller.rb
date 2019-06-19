@@ -1,6 +1,7 @@
 class ReviewsController < ApplicationController
   before_action :authenticate!, only: %i(create destroy)
   before_action :set_review, only: %i(show update destroy)
+  before_action :review_owner?, only: %i(update destroy)
 
   def index
     reviews = Review.recent
@@ -14,7 +15,7 @@ class ReviewsController < ApplicationController
   def create
     review = Review.new(review_params)
     if review.save
-      render json: review
+      render json: review, status: 201
     else
       response_bad_request
     end
@@ -22,7 +23,7 @@ class ReviewsController < ApplicationController
 
   def update
     if @review.update_attributes(review_params)
-      render json: @review
+      render json: @review, status: 204
     else
       response_bad_request
     end
@@ -30,7 +31,7 @@ class ReviewsController < ApplicationController
 
   def destroy
     if @review.destroy
-      render json: { message: 'deleted' }
+      render json: { message: 'deleted' }, status: 204
     else
       response_bad_request
     end
@@ -54,6 +55,12 @@ class ReviewsController < ApplicationController
     @review = Review.find_by(id: params[:id])
     if @review.nil?
       response_not_found('review')
+    end
+  end
+
+  def review_owner?
+    unless current_user == @review.user
+      response_forbidden
     end
   end
 end

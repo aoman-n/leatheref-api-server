@@ -30,6 +30,7 @@ gem 'mini_magick', '4.7.0'
 gem 'fog', '1.42'
 gem 'kaminari'
 gem 'api-pagination'
+gem 'active_model_serializers'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

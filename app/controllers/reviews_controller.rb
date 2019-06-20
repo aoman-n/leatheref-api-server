@@ -5,7 +5,7 @@ class ReviewsController < ApplicationController
 
   def index
     per_page = params[:per_page] ||= 10
-    reviews = paginate Review.page(params[:page] ||= 1).per(per_page).recent
+    reviews = paginate Review.page(params[:page] ||= 1).per(per_page).recent.includes(:user, :store, :product_category)
     render json: reviews
   end
 

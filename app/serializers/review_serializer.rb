@@ -3,18 +3,10 @@ class ReviewSerializer < ActiveModel::Serializer
   attribute :rating, key: :rara
 
   belongs_to :user, serializer: UserSerializer
-  belongs_to :store
-  belongs_to :product_category
+  belongs_to :store, serializer: StoreSerializer
+  belongs_to :product_category, serializer: ProductCategorySerializer
 
   def picture_path
     object.picture.url
-  end
-
-  class StoreSerializer < ActiveModel::Serializer
-    attributes :name, :id
-  end
-
-  class ProductCategorySerializer < ActiveModel::Serializer
-    attributes :name
   end
 end

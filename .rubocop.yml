@@ -31,3 +31,9 @@ RSpec/NotToNot:
 
 Airbnb/OptArgParameters:
   Enabled: false
+
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned

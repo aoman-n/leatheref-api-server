@@ -35,5 +35,5 @@ Airbnb/OptArgParameters:
 Layout/DotPosition:
   EnforcedStyle: leading
 
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: aligned
+# Layout/MultilineMethodCallIndentation:
+#   EnforcedStyle: aligned

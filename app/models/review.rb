@@ -30,9 +30,18 @@ class Review < ApplicationRecord
   validate :picture_size
 
   scope :recent, -> { order(created_at: :desc) }
-  scope :store_with, -> (store) do
+  scope :store_with, -> (store) {
     joins(:store).where(stores: { name: Store::QUERIES[store] })
-  end
+  }
+  scope :category_with, -> (id) {
+    joins(:product_category).where(product_categories: { id: id })
+  }
+  scope :with_store?, -> (store) {
+    store ? store_with(store) : tap {}
+  }
+  scope :with_category?, -> (category_id) {
+    category_id ? category_with(category_id) : tap {}
+  }
 
   def picture_path
     picture.url

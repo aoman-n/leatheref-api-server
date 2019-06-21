@@ -5,16 +5,12 @@ class ReviewsController < ApplicationController
 
   def index
     per_page = params[:per_page] ||= 10
-    store = params[:store]
-    if store
-      reviews = paginate Review.page(params[:page] ||= 1)
-                               .per(per_page).recent.store_with(store)
-                               .includes(:user, :store, :product_category)
-    else
-      reviews = paginate Review.page(params[:page] ||= 1)
-                               .per(per_page).recent
-                               .includes(:user, :store, :product_category)
-    end
+    reviews = paginate Review.page(params[:page] ||= 1)
+      .per(per_page)
+      .with_store?(params[:store])
+      .with_category?(params[:category]).recent
+      .includes(:user, :store, :product_category)
+
     render json: reviews
   end
 

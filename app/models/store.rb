@@ -12,4 +12,10 @@ class Store < ApplicationRecord
   has_many :reviews
 
   validates :name, uniqueness: true, presence: true
+
+  QUERIES = {
+    'seven' => 'セブン-イレブン',
+    'lawson' => 'ローソン',
+    'family' => 'ファミリーマート',
+  }.freeze
 end

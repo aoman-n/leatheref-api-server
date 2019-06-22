@@ -22,7 +22,7 @@
 
 FactoryBot.define do
   factory :user, class: User do
-    name { 'hogekun' }
+    login_name { 'hogekun' }
     email { 'hogekun@example.com' }
     password { 'password' }
     password_confirmation { 'password' }
@@ -41,7 +41,7 @@ FactoryBot.define do
   end
 
   factory :unactivated_user, class: User do
-    name { 'misokun' }
+    login_name { 'misokun' }
     email { 'misokun@example.com' }
     password { 'password' }
     password_confirmation { 'password' }

@@ -5,7 +5,7 @@ RSpec.describe 'Users API', type: :request do
     it 'ユーザーが作成されること' do
       allow(UserMailer).to receive_message_chain(:account_activation, :deliver_now)
       user_params = {
-        name: 'example',
+        login_name: 'example',
         email: 'example@example.com',
         password: 'password',
         password_confirmation: 'password',

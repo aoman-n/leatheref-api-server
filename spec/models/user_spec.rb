@@ -25,7 +25,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it '有効な名前、Emailアドレス、パスワード、パスワード確認があればUserを作成出来ること' do
     user = User.new(
-      name: 'Aoba',
+      login_name: 'Aoba',
       email: 'aobatest@example.com',
       password: 'password',
       password_confirmation: 'password'
@@ -33,9 +33,11 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
-  # name
-  it { is_expected.to validate_presence_of :name }
-  it { is_expected.to validate_length_of(:name).is_at_most(20) }
+  # login_name
+  it { is_expected.to validate_presence_of :login_name }
+  it { is_expected.to validate_length_of(:login_name).is_at_most(20) }
+  # display_name
+  it { is_expected.to validate_length_of(:display_name).is_at_most(20) }
   # email
   it { is_expected.to validate_presence_of :email }
   it { is_expected.to validate_length_of(:email).is_at_most(250) }
@@ -47,6 +49,13 @@ RSpec.describe User, type: :model do
     user = FactoryBot.create(:user, email: 'ExamPle@example.com')
     expect(user.reload.email).to eq 'example@example.com'
   end
+
+  it 'login_nameがdisplay_nameとしても保存されること' do
+    user = FactoryBot.create(:user)
+    expect(user.reload.login_name).to eq user.display_name
+  end
+
+  it 'login_nameのフォーマットチェック'
 
   describe 'アドレスのフォーマットチェック' do
     # ユーザーのパラメータを仕込み、各テストでemailを上書きする。

@@ -27,7 +27,13 @@ Rails.application.routes.draw do
     end
     resources :account_activations, only: [:edit]
     resources :password_resets, only: %i(create update)
-    resources :reviews
+
+    resources :reviews, shallow: true do
+      resources :comments, except: %i(index show) do
+        get :replies, on: :member
+      end
+    end
+
     resources :stores, only: [:index]
     resources :product_categories, only: [:index]
   end

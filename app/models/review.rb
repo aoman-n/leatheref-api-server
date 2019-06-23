@@ -29,6 +29,8 @@ class Review < ApplicationRecord
   validates_inclusion_of :rating, in: 1..10
   validate :picture_size
 
+  # default_scope { recent }
+
   scope :recent, -> { order(created_at: :desc) }
   scope :store_with, -> (store) {
     joins(:store).where(stores: { name: Store::QUERIES[store] })

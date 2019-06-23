@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_17_152008) do
+ActiveRecord::Schema.define(version: 2019_06_23_115814) do
+
+  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "review_id"
+    t.bigint "in_reply_to_id"
+    t.text "comment", null: false
+    t.boolean "reply", default: false
+    t.bigint "in_reply_to_user_id"
+    t.integer "like_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["in_reply_to_id"], name: "index_comments_on_in_reply_to_id"
+    t.index ["in_reply_to_user_id"], name: "index_comments_on_in_reply_to_user_id"
+    t.index ["review_id"], name: "index_comments_on_review_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
 
   create_table "product_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -63,6 +79,10 @@ ActiveRecord::Schema.define(version: 2019_06_17_152008) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "comments", "comments", column: "in_reply_to_id"
+  add_foreign_key "comments", "reviews"
+  add_foreign_key "comments", "users"
+  add_foreign_key "comments", "users", column: "in_reply_to_user_id"
   add_foreign_key "reviews", "product_categories"
   add_foreign_key "reviews", "stores"
   add_foreign_key "reviews", "users"

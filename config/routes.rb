@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     resources :reviews, shallow: true do
       resources :comments, except: %i(index show) do
         get :replies, on: :member
+        post :likes, to: 'comment_likes#create', on: :member
+        delete :likes, to: 'comment_likes#destroy', on: :member
       end
     end
 

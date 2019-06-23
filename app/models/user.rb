@@ -32,6 +32,7 @@ class User < ApplicationRecord
   has_secure_password validations: false
 
   has_many :reviews
+  has_many :likes, dependent: :destroy
 
   validates :display_name, length: { maximum: 20 }
   VALID_LOGIN_NAME_REGEX = /[0-9A-Za-z]+/i

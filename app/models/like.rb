@@ -6,7 +6,4 @@ class Like < ApplicationRecord
   validates :user_id, presence: true, uniqueness: {
     scope: :comment_id, message: "コメントに対して一つのライクしか出来ません。",
   }
-
-  def is_liked?
-  end
 end

@@ -11,11 +11,15 @@ class ReviewsController < ApplicationController
       .with_category?(params[:category]).recent
       .includes(:user, :store, :product_category)
 
-    render json: reviews
+    render json: reviews, each_serializer: ReviewSerializer, scope: {
+      'current_user': current_user,
+    }
   end
 
   def show
-    render json: @review
+    render json: @review, serializer: ReviewShowSerializer, scope: {
+      'current_user': current_user,
+    }
   end
 
   def create

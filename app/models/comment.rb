@@ -16,6 +16,10 @@ class Comment < ApplicationRecord
     !in_reply_to_id.nil? || attributes['reply']
   end
 
+  def liked?(user)
+    comment.likes.exists?(user_id: user.id)
+  end
+
   private
 
   def set_reply_to_user_id

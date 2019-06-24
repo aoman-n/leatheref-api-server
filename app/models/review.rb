@@ -20,7 +20,9 @@ class Review < ApplicationRecord
   belongs_to :user
   belongs_to :store
   belongs_to :product_category
-  has_many :comments, -> { where 'reply = false' }, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :without_reply_comments, -> { where 'reply = false' },
+           class_name: 'Comment', dependent: :destroy
 
   mount_uploader :picture, PictureUploader
 

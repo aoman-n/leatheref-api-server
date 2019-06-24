@@ -17,7 +17,8 @@
 
 |column|type...|options|desc|
 |---|---|---|---|
-|display_name|string|not null||
+|display_name|string|||
+|login_name|string|not null|||
 |email|string|||
 |image_url|string|||
 |password_digest|string|||
@@ -152,6 +153,15 @@ Model: Store
 |text|text|||
 |reply|boolean|||
 |in_reply_to_user_id(FK)|integer||リプライするコメントをしたユーザーを識別|
+|comment_like_count|integer|||
+
+### likes(ポリモーフィックにするかも)
+レビューのコメントに対するいいね！
+
+|column|type|options|
+|---|---|---|
+|comment_id(FK)|integer|unique|
+|user_id(FK)|integer|unique|
 
 ### reviews_tags
 メイン投稿とタグのリレーション

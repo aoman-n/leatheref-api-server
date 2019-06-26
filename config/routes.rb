@@ -20,10 +20,12 @@ Rails.application.routes.draw do
     post '/login', to: 'sessions#create'
     delete '/logout', to: 'sessions#destroy'
 
-    resources :users, only: [:create] do
+    resources :users, only: [:create], shallow: true do
       collection do
         get 'me'
       end
+      post :follow, to: 'follows#create', on: :member
+      delete :unfollow, to: 'follows#destroy', on: :member
     end
     resources :account_activations, only: [:edit]
     resources :password_resets, only: %i(create update)

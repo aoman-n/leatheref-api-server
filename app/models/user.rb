@@ -33,6 +33,12 @@ class User < ApplicationRecord
 
   has_many :reviews
   has_many :likes, dependent: :destroy
+  has_many :active_follows, class_name: "Follow",
+                            foreign_key: "user_id",
+                            dependent: :destroy
+  has_many :passive_follows, class_name: "Follow",
+                             foreign_key: "target_user_id",
+                             dependent: :destroy
 
   validates :display_name, length: { maximum: 20 }
   VALID_LOGIN_NAME_REGEX = /[0-9A-Za-z]+/i

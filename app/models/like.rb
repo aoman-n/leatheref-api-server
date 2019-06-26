@@ -6,4 +6,17 @@ class Like < ApplicationRecord
   validates :user_id, presence: true, uniqueness: {
     scope: :comment_id, message: "コメントに対して一つのライクしか出来ません。",
   }
+
+  after_save :increment_count
+  after_destroy :decrement_count
+
+  def increment_count
+    comment = self.comment
+    comment.update_attributes(like_count: comment.like_count + 1)
+  end
+
+  def decrement_count
+    comment = self.comment
+    comment.update_attributes(like_count: comment.like_count - 1)
+  end
 end

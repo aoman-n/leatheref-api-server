@@ -26,6 +26,9 @@ class Review < ApplicationRecord
 
   mount_uploader :picture, PictureUploader
 
+  delegate :name, to: :store, prefix: true
+  delegate :name, to: :product_category, prefix: true
+
   validates :product_name, presence: true, length: { minimum: 4 }
   validates :content, presence: true, length: { maximum: 500 }
   validates :rating, presence: true

@@ -59,7 +59,7 @@
 |prefecture_name||n
 |prefecture_name_kana||
 
-### follows
+### followers
 ユーザー間のフォロー、フォロワー
 
 Model: **Follow**
@@ -153,7 +153,7 @@ Model: Store
 |text|text|||
 |reply|boolean|||
 |in_reply_to_user_id(FK)|integer||リプライするコメントをしたユーザーを識別|
-|comment_like_count|integer|||
+|like_count|integer|||
 
 ### likes(ポリモーフィックにするかも)
 レビューのコメントに対するいいね！

@@ -4,7 +4,8 @@
 #
 #  id                :bigint           not null, primary key
 #  email             :string(255)
-#  name              :string(255)      not null
+#  display_name      :string(255)
+#  login_name        :string(255)      not null
 #  password_digest   :string(255)
 #  remember_digest   :string(255)
 #  admin             :boolean          default(FALSE)

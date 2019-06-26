@@ -1,10 +1,9 @@
 class ReviewShowSerializer < ActiveModel::Serializer
-  attributes :id, :product_name, :content, :picture_path, :rating
-  # attribute :comments, unless: :reply?
+  attributes :id, :product_name, :content, :picture_path, :rating, :created_at
+  attribute :store_name
+  attribute :product_category_name
 
   belongs_to :user, serializer: UserSerializer
-  belongs_to :store, serializer: StoreSerializer
-  belongs_to :product_category, serializer: ProductCategorySerializer
   has_many :without_reply_comments, key: :comments
 
   def picture_path

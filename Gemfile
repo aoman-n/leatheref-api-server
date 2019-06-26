@@ -31,6 +31,7 @@ gem 'fog', '1.42'
 gem 'kaminari'
 gem 'api-pagination'
 gem 'active_model_serializers'
+gem 'fast_jsonapi'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

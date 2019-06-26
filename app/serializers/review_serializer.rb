@@ -1,17 +1,25 @@
-class ReviewSerializer < ActiveModel::Serializer
-  attributes :id, :product_name, :content, :picture_path
-  attribute :rating, key: :rara
-  attribute :comment_count
+class ReviewSerializer
+  include FastJsonapi::ObjectSerializer
+  set_type :review
+  set_id :id
 
-  belongs_to :user, serializer: UserSerializer
-  belongs_to :store, serializer: StoreSerializer
-  belongs_to :product_category, serializer: ProductCategorySerializer
+  attributes :product_name, :content
 
-  def picture_path
+  attribute :picture_path do |object|
     object.picture.url
   end
 
-  def comment_count
+  attribute :comment_count do |object|
     object.without_reply_comments.count
   end
+
+  attribute :store_name do |object|
+    object.store_name
+  end
+
+  attribute :product_category_name do |object|
+    object.product_category_name
+  end
+
+  belongs_to :user, serializer: UserSerializer
 end

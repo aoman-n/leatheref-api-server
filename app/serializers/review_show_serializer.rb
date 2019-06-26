@@ -1,26 +1,32 @@
-class ReviewShowSerializer
-  include FastJsonapi::ObjectSerializer
-  set_type :review
-  set_id :id
+class ReviewShowSerializer < ActiveModel::Serializer
+  attributes :id, :product_name, :content, :picture_path, :rating
+  # attribute :comments, unless: :reply?
 
-  attributes :product_name, :content, :rating
+  belongs_to :user, serializer: UserSerializer
+  belongs_to :store, serializer: StoreSerializer
+  belongs_to :product_category, serializer: ProductCategorySerializer
+  has_many :without_reply_comments, key: :comments
 
-  attribute :picture_path do |object|
+  def picture_path
     object.picture.url
   end
 
-  attribute :comment_count do |object|
-    object.without_reply_comments.count
-  end
+  class CommentSerializer < ActiveModel::Serializer
+    attributes :id, :comment, :like_count, :created_at
+    attribute :reply_count
+    attribute :liked
 
-  attribute :store_name do |object|
-    object.store_name
-  end
+    def reply_count
+      object.replies.count
+    end
 
-  attribute :product_category_name do |object|
-    object.product_category_name
+    def liked
+      current_user = scope[:current_user]
+      if current_user
+        object.likes.exists?(user_id: current_user.id)
+      else
+        false
+      end
+    end
   end
-
-  has_many :without_reply_comments, key: :comments,
-                                    record_type: :comment, serializer: CommentSerializer
 end

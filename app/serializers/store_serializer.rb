@@ -1,5 +1,3 @@
-class StoreSerializer
-  include FastJsonapi::ObjectSerializer
-
+class StoreSerializer < ActiveModel::Serializer
   attributes :id, :name
 end

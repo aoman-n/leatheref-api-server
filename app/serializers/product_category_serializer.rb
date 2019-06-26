@@ -1,5 +1,3 @@
-class ProductCategorySerializer
-  include FastJsonapi::ObjectSerializer
-
+class ProductCategorySerializer < ActiveModel::Serializer
   attributes :id, :name
 end

@@ -40,6 +40,8 @@ class User < ApplicationRecord
   has_many :passive_follows, class_name: "Follow",
                              foreign_key: "target_user_id",
                              dependent: :destroy
+  has_many :following, through: :active_follows, source: :target_user
+  has_many :followers, through: :passive_follows, source: :user
 
   validates :display_name, length: { maximum: 20 }
   VALID_LOGIN_NAME_REGEX = /[0-9A-Za-z]+/i

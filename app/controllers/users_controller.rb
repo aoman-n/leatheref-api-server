@@ -15,6 +15,18 @@ class UsersController < ApplicationController
     render json: current_user
   end
 
+  def following
+    user = User.find(params[:id])
+    users = paginate user.following.page(params[:page] ||= 1).per(params[:per_page] ||= 10)
+    render json: users, each_serializer: UserSerializer
+  end
+
+  def followers
+    user = User.find(params[:id])
+    users = paginate user.followers.page(params[:page] ||= 1).per(params[:per_page] ||= 10)
+    render json: users, each_serializer: UserSerializer
+  end
+
   private
 
   def user_params

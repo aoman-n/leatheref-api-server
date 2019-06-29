@@ -42,5 +42,9 @@ Rails.application.routes.draw do
 
     resources :stores, only: [:index]
     resources :product_categories, only: [:index]
+
+    resources :rooms, only: [:index, :show, :create, :destroy] do
+      resources :direct_messages, only: [:create, :destroy], shallow: true
+    end
   end
 end

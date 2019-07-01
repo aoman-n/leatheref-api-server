@@ -4,6 +4,8 @@ class DirectMessage < ApplicationRecord
 
   validates :message, presence: true, length: { maximum: 400 }
 
+  scope :recent, -> { order(created_at: :desc) }
+
   def owner?
     sender_id == current_user.id
   end

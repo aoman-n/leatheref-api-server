@@ -4,8 +4,11 @@ class RoomsController < ApplicationController
   before_action :joined_user?, only: %i(show destroy)
 
   def index
-    rooms = current_user.rooms
-    render json: rooms
+    # TODO: queryを無駄に発行しているため、最小限に抑える書き方を調べる。
+    rooms = current_user.rooms.includes(:newest_message, :users, { newest_message: :sender })
+    # includeでネストに対応 -> 参考: https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/adapters.md#include-option
+    render json: rooms, each_serializer: RoomSerializer,
+           include: ['newst_message', 'users', 'newest_message.sender']
   end
 
   def show

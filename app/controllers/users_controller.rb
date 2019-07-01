@@ -11,6 +11,17 @@ class UsersController < ApplicationController
     end
   end
 
+  # PATCH /api/users/:id
+  # MEMO: :idは使用してないためurlにも必要ないかも
+  def update
+    current_user.update!(update_user_params)
+    current_user.update!(image_url: current_user.image.url)
+    render current_user
+  rescue => e
+    p e
+    render json: { message: current_user.errors.full_messages }, status: 400
+  end
+
   def me
     render json: current_user
   end
@@ -31,5 +42,9 @@ class UsersController < ApplicationController
 
   def user_params
     params.permit(:login_name, :email, :password, :password_confirmation)
+  end
+
+  def update_user_params
+    params.permit(:login_name, :display_name, :image)
   end
 end

@@ -63,6 +63,8 @@ class User < ApplicationRecord
                        allow_nil: true,
                        unless: :uid?
 
+  mount_uploader :image, UserAvatarUploader
+
   def self.find_or_create_from_auth(auth)
     provider = auth[:provider]
     uid = auth[:uid]

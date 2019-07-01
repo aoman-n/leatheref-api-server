@@ -1,7 +1,7 @@
 class RoomsController < ApplicationController
   before_action :authenticate!
-  before_action :set_room, only: %i(show destroy)
-  before_action :joined_user?, only: %i(show destroy)
+  before_action :set_room, only: %i(show destroy leave)
+  before_action :joined_user?, only: %i(show destroy leave)
 
   def index
     # TODO: queryを無駄に発行しているため、最小限に抑える書き方を調べる。
@@ -28,8 +28,21 @@ class RoomsController < ApplicationController
   end
 
   def destroy
-    room = Room.find(params[:id])
-    if room.destroy
+    if @room.destroy
+      head :no_content
+    else
+      response_bad_request
+    end
+  end
+
+  # /api/rooms/:id/join
+  def join
+    # あとからユーザーを追加したい場合の実装をする
+  end
+
+  def leave
+    entry = current_user.entries.find_by(room_id: @room.id)
+    if entry.present? && entry.destroy
       head :no_content
     else
       response_bad_request
@@ -40,10 +53,11 @@ class RoomsController < ApplicationController
 
   def set_room
     @room = Room.find(params[:id])
+    response_not_found if @room.blank?
   end
 
   def joined_user?
-    unless @room.current_user_exists?
+    unless @room.current_user_exists?(current_user)
       response_forbidden
     end
   end

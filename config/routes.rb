@@ -45,6 +45,8 @@ Rails.application.routes.draw do
 
     resources :rooms, only: [:index, :show, :create, :destroy] do
       resources :direct_messages, only: [:create, :destroy], shallow: true
+      post :join, to 'rooms#join', on: :member
+      delete :leave, to: 'rooms#leave', on: :member
     end
   end
 end

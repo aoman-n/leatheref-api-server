@@ -75,14 +75,33 @@ Model: **Follow**
 ユーザー間のダイレクトメッセージの保存
 
 - belongs_to :sender, class_name: "User"
-- belongs_to :receiver, class_name: "User"
+- belongs_to :room
 
 |column|type|options|
 |---|---|---|
 |sender_id(FK)|integer||
-|receiver_id(FK)|integer||
-|text|text||
+|room_id(FK)|integer||
+|text|text|not null|
 |picture|string||
+
+### rooms
+ダイレクトメッセージの部屋
+
+- has_many :users
+- has_many :direct_messages
+
+|column|type|options|
+|---|---|---|
+|id|integer||
+|updated_at|datetime||
+
+### entries
+どのUserがどのRoomに所属しているか
+
+|column|type|options|
+|---|---|---|
+|room_id(FK)|integer||
+|user_id(FK)|integer||
 
 ### stores
 コンビニ社の管理テーブル

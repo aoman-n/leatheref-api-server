@@ -5,7 +5,8 @@ class RoomsController < ApplicationController
 
   def index
     # TODO: queryを無駄に発行しているため、最小限に抑える書き方を調べる。
-    rooms = current_user.rooms.includes(:newest_message, :users, { newest_message: :sender })
+    # 参考: https://moneyforward.com/engineers_blog/2019/04/02/activerecord-includes-preload-eagerload/
+    rooms = current_user.rooms.eager_load(newest_message: :sender).preload(:users)
     # includeでネストに対応 -> 参考: https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/adapters.md#include-option
     render json: rooms, each_serializer: RoomSerializer,
            include: ['newst_message', 'users', 'newest_message.sender']

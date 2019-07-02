@@ -5,7 +5,7 @@ class CreateDirectMessages < ActiveRecord::Migration[5.2]
       t.references :room
       t.text :message
       t.string :image
-      t.integer :type
+      t.integer :data_type
 
       t.timestamps
     end

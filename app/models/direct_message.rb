@@ -5,7 +5,7 @@ class DirectMessage < ApplicationRecord
   validates :message, presence: true, length: { maximum: 400 }, unless: :image?
   validates :image, presence: true, unless: :message?
 
-  enum type: { message: 0, image: 1 }
+  enum data_type: { message: 0, image: 1 }
 
   scope :recent, -> { order(created_at: :desc) }
 

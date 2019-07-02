@@ -11,5 +11,5 @@ DELETE /api/rooms/:id/leave : roomから退出
 POST /api/rooms/:id/join : roomへ入室, params: { user_ids: [number...] }
 
 ### direct_messages_controller
-POST /api/rooms/:room_id/direct_messages : ダイレクトメッセージを送信, params: { messages: string }
+POST /api/rooms/:room_id/direct_messages : ダイレクトメッセージを送信, params: { messages: string, image: data, data_type: image or message }
 DELETE /api/direct_messages/:id(.:format) : ダイレクトメッセージを削除(自身のメッセージのみ)

@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2019_07_01_160117) do
     t.bigint "room_id"
     t.text "message"
     t.string "image"
-    t.integer "type"
+    t.integer "data_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_direct_messages_on_room_id"

@@ -3,8 +3,9 @@ class CreateDirectMessages < ActiveRecord::Migration[5.2]
     create_table :direct_messages do |t|
       t.references :sender, foreign_key: { to_table: :users }
       t.references :room
-      t.text :message, null: false
+      t.text :message
       t.string :image
+      t.integer :type
 
       t.timestamps
     end

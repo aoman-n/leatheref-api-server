@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(version: 2019_07_01_160117) do
   create_table "direct_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "sender_id"
     t.bigint "room_id"
-    t.text "message", null: false
+    t.text "message"
     t.string "image"
+    t.integer "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_direct_messages_on_room_id"

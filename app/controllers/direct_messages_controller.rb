@@ -10,7 +10,7 @@ class DirectMessagesController < ApplicationController
     when 'image'
       message_params = params_with_image
     else
-      response_bad_request
+      response_bad_request and return
     end
 
     direct_message = @room.direct_messages.new(message_params)
@@ -45,6 +45,6 @@ class DirectMessagesController < ApplicationController
   end
 
   def params_with_image
-    params.permit(:image).merge(sender_id: current_user.id, data_type: DirectMessage.date_types['image'])
+    params.permit(:image).merge(sender_id: current_user.id, data_type: DirectMessage.data_types['image'])
   end
 end

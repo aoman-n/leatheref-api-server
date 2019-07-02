@@ -6,6 +6,7 @@ class DirectMessage < ApplicationRecord
   validates :image, presence: true, unless: :message?
 
   enum data_type: { message: 0, image: 1 }
+  mount_uploader :image, DirectMessageImageUploader
 
   scope :recent, -> { order(created_at: :desc) }
 

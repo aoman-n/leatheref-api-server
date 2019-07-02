@@ -35,5 +35,9 @@ Airbnb/OptArgParameters:
 Layout/DotPosition:
   EnforcedStyle: leading
 
+# and returnを許可
+Style/AndOr:
+  EnforcedStyle: conditionals
+
 # Layout/MultilineMethodCallIndentation:
 #   EnforcedStyle: aligned

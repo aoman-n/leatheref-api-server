@@ -38,6 +38,15 @@ class UsersController < ApplicationController
     render json: users, each_serializer: UserSerializer
   end
 
+  def search
+    limit_page = 30
+    q = params[:q]
+    page = params[:page]
+    per_page = (page.to_i > limit_page || page.blank?) ? 10 : page
+    users = User.where(['login_name LIKE ?', "%#{q}%"]).limit(per_page)
+    render json: users, each_serializer: UserSerializer
+  end
+
   private
 
   def user_params

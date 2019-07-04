@@ -20,6 +20,7 @@ vendor/bundle
 
 # upload files
 public/uploads/**/*
+public/uploads_test/**/*
 
 memo.md
 # Ignore master key for decrypting credentials and more.

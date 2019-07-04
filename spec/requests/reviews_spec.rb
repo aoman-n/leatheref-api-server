@@ -4,7 +4,7 @@ RSpec.describe 'Reviews', type: :request, focus: true do
   describe 'レビューのリクエストスペック' do
     let(:user) { FactoryBot.create(:user) }
 
-    before do
+    before :all do
       @stores = Store.all
       @product_categories = ProductCategory.all
     end
@@ -18,6 +18,7 @@ RSpec.describe 'Reviews', type: :request, focus: true do
         rating: 5,
         store_id: @stores[0].id,
         product_category_id: @product_categories[0].id,
+        picture: Rack::Test::UploadedFile.new("#{Rails.root}/spec/files/surume.jpg", 'image/jpg'),
       }
       expect do
         post reviews_path, headers: generate_login_header(token), params: review_params

@@ -1,6 +1,8 @@
 require 'jwt'
 
-module SessionsHelper
+module Sessionable
+  extend ActiveSupport::Concern
+
   def log(string)
     puts string
   end
@@ -34,7 +36,7 @@ module SessionsHelper
     @current_user = nil
   end
 
-  # def current_user?(user)
-  #   user == current_user
-  # end
+  def current_user?(user)
+    user == current_user
+  end
 end

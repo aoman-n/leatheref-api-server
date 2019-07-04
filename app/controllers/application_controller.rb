@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
   include ResponseModule
-  include SessionsHelper
+  include Sessionable
 
   # unless Rails.env.development?
   # rescue_from Exception, with: :custom_error_500

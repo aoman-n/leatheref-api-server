@@ -41,15 +41,15 @@ class Review < ApplicationRecord
   scope :store_with, -> (store) {
     joins(:store).where(stores: { name: Store::QUERIES[store] })
   }
-  scope :category_with, -> (id) {
-    joins(:product_category).where(product_categories: { id: id })
+  scope :category_with, -> (category_id) {
+    joins(:product_category).where(product_categories: { id: category_id })
   }
-  scope :with_store?, -> (store) {
-    store ? store_with(store) : tap {}
-  }
-  scope :with_category?, -> (category_id) {
-    category_id ? category_with(category_id) : tap {}
-  }
+  # scope :with_store?, -> (store) {
+  #   store ? store_with(store) : tap {}
+  # }
+  # scope :with_category?, -> (category_id) {
+  #   category_id ? category_with(category_id) : tap {}
+  # }
 
   def picture_path
     picture.url

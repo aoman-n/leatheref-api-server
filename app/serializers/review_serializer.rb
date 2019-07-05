@@ -22,6 +22,7 @@ class ReviewSerializer < ActiveModel::Serializer
   attribute :comment_count
   attribute :store_name
   attribute :product_category_name
+  attribute :test
 
   belongs_to :user, serializer: UserSerializer
 
@@ -31,5 +32,9 @@ class ReviewSerializer < ActiveModel::Serializer
 
   def comment_count
     object.comments.count
+  end
+
+  def test
+    p instance_options[:current_user]
   end
 end

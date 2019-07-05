@@ -5,15 +5,36 @@ class ReviewsController < ApplicationController
 
   def index
     per_page = params[:per_page] ||= 10
-    reviews = paginate Review.page(params[:page] ||= 1)
+    page = params[:page] ||= 1
+    filtering_list = params.permit!.slice(:store, :category).to_hash.compact
+
+    # TODO: リファクタリング
+    initialized_reviews = paginate Review
+      .page(page)
       .per(per_page)
-      .with_store?(params[:store])
-      .with_category?(params[:category]).recent
+      .recent
+    reviews = filtering_list
+      .reduce(initialized_reviews) do |r, (key, val)|
+        r.send("#{key}_with", val)
+      end
       .includes(:user, :store, :product_category)
 
-    render json: reviews, each_serializer: ReviewSerializer, scope: {
-      'current_user': current_user,
-    }
+    render json: ActiveModel::Serializer::CollectionSerializer.new(
+      reviews,
+      serializer: ReviewSerializer,
+      current_user: current_user,
+    )
+
+    # per_page = params[:per_page] ||= 10
+    # reviews = paginate Review.page(params[:page] ||= 1)
+    #   .per(per_page)
+    #   .with_store?(params[:store])
+    #   .with_category?(params[:category]).recent
+    #   .includes(:user, :store, :product_category)
+
+    # render json: reviews, each_serializer: ReviewSerializer, scope: {
+    #   'current_user': current_user,
+    # }
   end
 
   def show

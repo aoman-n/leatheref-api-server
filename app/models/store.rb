@@ -18,4 +18,20 @@ class Store < ApplicationRecord
     'lawson' => 'ローソン',
     'family' => 'ファミリーマート',
   }.freeze
+
+  def self.get_seven_id
+    Store.get_record('seven').id
+  end
+
+  def self.get_lawson_id
+    Store.get_record('lawson').id
+  end
+
+  def self.get_family_id
+    Store.get_record('family').id
+  end
+
+  def self.get_record(store_name)
+    Store.find_by(name: QUERIES[store_name])
+  end
 end

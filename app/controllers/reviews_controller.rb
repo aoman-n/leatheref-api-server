@@ -4,7 +4,7 @@ class ReviewsController < ApplicationController
   before_action :review_owner?, only: %i(update destroy)
 
   def index
-    per_page = params[:per_page] ||= 10
+    per_page = params[:per_page] ||= 2
     page = params[:page] ||= 1
     filtering_list = params.permit!.slice(:store, :category).to_hash.compact
 
@@ -24,7 +24,6 @@ class ReviewsController < ApplicationController
       serializer: ReviewSerializer,
       current_user: current_user,
     )
-
     # per_page = params[:per_page] ||= 10
     # reviews = paginate Review.page(params[:page] ||= 1)
     #   .per(per_page)

@@ -23,8 +23,10 @@
 
 FactoryBot.define do
   factory :user, class: User do
-    login_name { 'hogekun' }
-    email { 'hogekun@example.com' }
+    sequence(:login_name) { |n| "hoge#{n}" }
+    sequence(:email) { |n| "hoge#{n}@example.com" }
+    # login_name { 'hogekun' }
+    # email { 'hogekun@example.com' }
     password { 'password' }
     password_confirmation { 'password' }
     admin { false }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Reviews', type: :request, focus: true do
+RSpec.describe 'Reviews', type: :request do
   describe 'レビューのリクエストスペック' do
     let(:user) { FactoryBot.create(:user) }
 

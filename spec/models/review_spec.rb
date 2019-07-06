@@ -18,7 +18,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Review, type: :model do
+RSpec.describe Review, type: :model, focus: true do
   describe 'バリデーションのテスト' do
     # product_name
     it { is_expected.to validate_presence_of :product_name }
@@ -31,15 +31,36 @@ RSpec.describe Review, type: :model do
     it { is_expected.to validate_inclusion_of(:rating).in_range(1..10) }
   end
 
-  # describe '#recent' do
-  #   before do
-  #     10.times do
-  #       FactoryBot.create(:review)
-  #     end
-  #   end
+  describe 'scope' do
+    before :all do
+      @stores = Store.all
+      @product_categories = ProductCategory.all
+    end
 
-  #   it '新着順にreviewを取得すること' do
-  #     expect(10).to eq 10
-  #   end
-  # end
+    describe 'store_with' do
+      let!(:seven_review) { FactoryBot.create(:review, store_id: Store.get_seven_id) }
+      let!(:lawson_review) { FactoryBot.create(:review, store_id: Store.get_lawson_id) }
+      let!(:family_review) { FactoryBot.create(:review, store_id: Store.get_family_id) }
+
+      it 'セブン-イレブンのレビューが取得されること' do
+        reviews = Review.store_with('seven')
+        expect(reviews).to include seven_review
+      end
+
+      it 'ローソンのレビューが取得されること' do
+        reviews = Review.store_with('lawson')
+        expect(reviews).to include lawson_review
+      end9
+
+      it 'ファミマのレビューが取得されること' do
+        reviews = Review.store_with('family')
+        expect(reviews).to include family_review
+      end
+    end
+
+    describe 'category_with' do
+      it '指定したカテゴリーのレビューが取得されること' do
+      end
+    end
+  end
 end

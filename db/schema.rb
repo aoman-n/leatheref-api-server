@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_01_160117) do
+ActiveRecord::Schema.define(version: 2019_07_09_123453) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -75,6 +75,12 @@ ActiveRecord::Schema.define(version: 2019_07_01_160117) do
     t.index ["name"], name: "index_product_categories_on_name", unique: true
   end
 
+  create_table "reactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "reviews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "product_name", null: false
     t.text "content", null: false
@@ -90,6 +96,15 @@ ActiveRecord::Schema.define(version: 2019_07_01_160117) do
     t.index ["product_category_id"], name: "index_reviews_on_product_category_id"
     t.index ["store_id"], name: "index_reviews_on_store_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
+  create_table "reviews_reactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "review_id"
+    t.bigint "reaction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reaction_id"], name: "index_reviews_reactions_on_reaction_id"
+    t.index ["review_id"], name: "index_reviews_reactions_on_review_id"
   end
 
   create_table "rooms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -140,4 +155,6 @@ ActiveRecord::Schema.define(version: 2019_07_01_160117) do
   add_foreign_key "reviews", "product_categories"
   add_foreign_key "reviews", "stores"
   add_foreign_key "reviews", "users"
+  add_foreign_key "reviews_reactions", "reactions"
+  add_foreign_key "reviews_reactions", "reviews"
 end

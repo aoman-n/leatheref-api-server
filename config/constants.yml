@@ -30,6 +30,11 @@ common: &common
     - おでん
     - 中華まん
     - その他・雑貨
+  reactions:
+    - AWESOME
+    - YUMMY
+    - SOSO
+    - IFFY
 
 development:
   <<: *common

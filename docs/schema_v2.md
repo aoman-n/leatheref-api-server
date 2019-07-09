@@ -138,7 +138,7 @@ Model: Store
 |rating|integer|1~5||
 |stamp_count||
 
-### reviews_stamps(relation)
+### reviews_reactions(relation)
 
 - belogs_to :review
 - belogs_to :stamp
@@ -146,13 +146,17 @@ Model: Store
 |column|type|options|
 |---|---|---|
 |review_id(FK)|integer||
-|stamp_id(FK)|integer||
+|reaction_id(FK)|integer||
 
-### stamps
+### reactions
 投稿へのスタンプ
 
-- has_many :reviews_stamps
-- has_many :reviews, through: :reviews_stamps
+- has_many :reviews_reactions
+- has_many :reviews, through: :reviews_reactions
+
+|column|type|options|
+|---|---|---|
+|name|string|||
 
 ### comments
 投稿へのコメント

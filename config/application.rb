@@ -42,7 +42,8 @@ module AuthApiServer
                        helper_specs: false,
                        routing_specs: false,
                        request_specs: false,
-                       feature: false
+                       fixtures: false,
+                       controller_specs: false
     end
 
     config.autoload_paths += Dir[Rails.root.join('app', 'uploaders')]

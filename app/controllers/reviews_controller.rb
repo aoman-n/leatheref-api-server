@@ -4,36 +4,36 @@ class ReviewsController < ApplicationController
   before_action :review_owner?, only: %i(update destroy)
 
   def index
-    per_page = params[:per_page] ||= 2
+    per_page = params[:per_page] ||= 10
     page = params[:page] ||= 1
+    # TODO: リファクタリング
+    # モデルクラスの特異メソッドに移動する(filtering_list, initialized_reviews)
     filtering_list = params.permit!.slice(:store, :category).to_hash.compact
 
-    # TODO: リファクタリング
     initialized_reviews = paginate Review
       .page(page)
       .per(per_page)
       .recent
+
     reviews = filtering_list
       .reduce(initialized_reviews) do |r, (key, val)|
         r.send("#{key}_with", val)
       end
-      .includes(:user, :store, :product_category)
+      .eager_load(:user, :store, :product_category)
+
+    # reactions = Review.joins(:reactions)
+    #   .joins(:review_reactions)
+    #   .where(id: reviews.map { |review| review.id })
+    #   .group('reactions.name')
+    #   .select("review.id, count(reaction.id) as reaction_count")
+    #   .map { |r| [r.id, r.reaction_count] }.to_h
 
     render json: ActiveModel::Serializer::CollectionSerializer.new(
       reviews,
       serializer: ReviewSerializer,
       current_user: current_user,
+      include: ['user', 'store', 'product_category']
     )
-    # per_page = params[:per_page] ||= 10
-    # reviews = paginate Review.page(params[:page] ||= 1)
-    #   .per(per_page)
-    #   .with_store?(params[:store])
-    #   .with_category?(params[:category]).recent
-    #   .includes(:user, :store, :product_category)
-
-    # render json: reviews, each_serializer: ReviewSerializer, scope: {
-    #   'current_user': current_user,
-    # }
   end
 
   def show

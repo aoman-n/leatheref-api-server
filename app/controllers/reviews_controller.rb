@@ -21,17 +21,19 @@ class ReviewsController < ApplicationController
       end
       .eager_load(:user, :store, :product_category)
 
-    # reactions = Review.joins(:reactions)
-    #   .joins(:review_reactions)
-    #   .where(id: reviews.map { |review| review.id })
-    #   .group('reactions.name')
-    #   .select("review.id, count(reaction.id) as reaction_count")
-    #   .map { |r| [r.id, r.reaction_count] }.to_h
+    # reviewに対するそれぞれのreactionをカウントする
+    reaction_counts = Review
+      .where(id: reviews.map(&:id))
+      .joins(:reactions)
+      .group("name, id")
+      .select('reviews.*, reactions.name, COUNT(reviews.id) AS reaction_count')
+      .map { |r| { review_id: r.id, name: r.name, count: r.reaction_count } }
 
     render json: ActiveModel::Serializer::CollectionSerializer.new(
       reviews,
       serializer: ReviewSerializer,
       current_user: current_user,
+      reaction_counts: reaction_counts,
       include: ['user', 'store', 'product_category']
     )
   end

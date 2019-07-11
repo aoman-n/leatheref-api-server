@@ -23,8 +23,8 @@ class Review < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :without_reply_comments, -> { where 'reply = false' },
            class_name: 'Comment', dependent: :destroy
-  has_many :reviews_reactions, dependent: :destroy
-  has_many :reactions, through: :reviews_reactions
+  has_many :review_reactions, dependent: :destroy
+  has_many :reactions, through: :review_reactions
 
   mount_uploader :picture, PictureUploader
 

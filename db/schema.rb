@@ -82,6 +82,18 @@ ActiveRecord::Schema.define(version: 2019_07_09_165240) do
     t.index ["name"], name: "index_reactions_on_name", unique: true
   end
 
+  create_table "review_reactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "review_id"
+    t.bigint "reaction_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reaction_id"], name: "index_review_reactions_on_reaction_id"
+    t.index ["review_id", "reaction_id", "user_id"], name: "index_review_reactions_on_review_id_and_reaction_id_and_user_id", unique: true
+    t.index ["review_id"], name: "index_review_reactions_on_review_id"
+    t.index ["user_id"], name: "index_review_reactions_on_user_id"
+  end
+
   create_table "reviews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "product_name", null: false
     t.text "content", null: false
@@ -97,16 +109,6 @@ ActiveRecord::Schema.define(version: 2019_07_09_165240) do
     t.index ["product_category_id"], name: "index_reviews_on_product_category_id"
     t.index ["store_id"], name: "index_reviews_on_store_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
-  end
-
-  create_table "reviews_reactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "review_id"
-    t.bigint "reaction_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["reaction_id"], name: "index_reviews_reactions_on_reaction_id"
-    t.index ["review_id", "reaction_id"], name: "index_reviews_reactions_on_review_id_and_reaction_id", unique: true
-    t.index ["review_id"], name: "index_reviews_reactions_on_review_id"
   end
 
   create_table "rooms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -154,9 +156,10 @@ ActiveRecord::Schema.define(version: 2019_07_09_165240) do
   add_foreign_key "follows", "users", column: "target_user_id"
   add_foreign_key "likes", "comments"
   add_foreign_key "likes", "users"
+  add_foreign_key "review_reactions", "reactions"
+  add_foreign_key "review_reactions", "reviews"
+  add_foreign_key "review_reactions", "users"
   add_foreign_key "reviews", "product_categories"
   add_foreign_key "reviews", "stores"
   add_foreign_key "reviews", "users"
-  add_foreign_key "reviews_reactions", "reactions"
-  add_foreign_key "reviews_reactions", "reviews"
 end

@@ -45,7 +45,7 @@ class User < ApplicationRecord
   has_many :entries, dependent: :destroy
   has_many :rooms, through: :entries
   has_many :review_reactions, dependent: :destroy
-  has_many :reviews, through: :review_reactions
+  has_many :reactions, through: :review_reactions
 
   validates :display_name, length: { maximum: 20 }
   VALID_LOGIN_NAME_REGEX = /[0-9A-Za-z]+/i

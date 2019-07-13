@@ -18,7 +18,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Review, type: :model, focus: true do
+RSpec.describe Review, type: :model do
   describe 'バリデーションのテスト' do
     # product_name
     it { is_expected.to validate_presence_of :product_name }
@@ -32,35 +32,35 @@ RSpec.describe Review, type: :model, focus: true do
   end
 
   describe 'scope' do
-    before :all do
-      @stores = Store.all
-      @product_categories = ProductCategory.all
-    end
+    # before :all do
+    #   @stores = Store.all
+    #   @product_categories = ProductCategory.all
+    # end
 
-    describe 'store_with' do
-      let!(:seven_review) { FactoryBot.create(:review, store_id: Store.get_seven_id) }
-      let!(:lawson_review) { FactoryBot.create(:review, store_id: Store.get_lawson_id) }
-      let!(:family_review) { FactoryBot.create(:review, store_id: Store.get_family_id) }
+    # describe 'store_with' do
+    #   let!(:seven_review) { FactoryBot.create(:review, store_id: Store.get_seven_id) }
+    #   let!(:lawson_review) { FactoryBot.create(:review, store_id: Store.get_lawson_id) }
+    #   let!(:family_review) { FactoryBot.create(:review, store_id: Store.get_family_id) }
 
-      it 'セブン-イレブンのレビューが取得されること' do
-        reviews = Review.store_with('seven')
-        expect(reviews).to include seven_review
-      end
+    #   it 'セブン-イレブンのレビューが取得されること' do
+    #     reviews = Review.store_with('seven')
+    #     expect(reviews).to include seven_review
+    #   end
 
-      it 'ローソンのレビューが取得されること' do
-        reviews = Review.store_with('lawson')
-        expect(reviews).to include lawson_review
-      end9
+    #   it 'ローソンのレビューが取得されること' do
+    #     reviews = Review.store_with('lawson')
+    #     expect(reviews).to include lawson_review
+    #   end
 
-      it 'ファミマのレビューが取得されること' do
-        reviews = Review.store_with('family')
-        expect(reviews).to include family_review
-      end
-    end
+    #   it 'ファミマのレビューが取得されること' do
+    #     reviews = Review.store_with('family')
+    #     expect(reviews).to include family_review
+    #   end
+    # end
 
-    describe 'category_with' do
-      it '指定したカテゴリーのレビューが取得されること' do
-      end
-    end
+    # describe 'category_with' do
+    #   it '指定したカテゴリーのレビューが取得されること' do
+    #   end
+    # end
   end
 end

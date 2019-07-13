@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
   end
 
   def create
-    comment = Comment.new(comment_params)
+    comment = @review.comments.new(comment_params)
     if comment.save
       render json: comment
     else
@@ -18,6 +18,7 @@ class CommentsController < ApplicationController
     end
   end
 
+  # 無駄にSQLが走っている気がする
   def destroy
     if @comment.destroy
       head :no_content
@@ -41,7 +42,7 @@ class CommentsController < ApplicationController
       :comment,
       :reply,
       :in_reply_to_id,
-    ).merge(user_id: current_user.id, review_id: @review.id)
+    ).merge(user_id: current_user.id)
   end
 
   def set_review

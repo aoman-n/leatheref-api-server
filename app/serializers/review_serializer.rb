@@ -23,7 +23,6 @@ class ReviewSerializer < ActiveModel::Serializer
   attribute :store_name
   attribute :product_category_name
   attribute :reactions
-  # attribute :test
 
   belongs_to :user, serializer: UserSerializer
 
@@ -36,17 +35,8 @@ class ReviewSerializer < ActiveModel::Serializer
   end
 
   def reactions
-    # Review.joins(:reactions)
-    #   .joins(:review_reactions)
-    #   .where(id: object.id)
-    #   .group('reactions.name')
-    #   .size
     instance_options[:reaction_counts].select do |r|
       r[:review_id] === object.id
     end
   end
-
-  # def test
-  #   p instance_options[:current_user]
-  # end
 end

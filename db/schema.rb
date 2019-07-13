@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 2019_07_09_165240) do
     t.string "picture"
     t.integer "price"
     t.integer "rating", null: false
-    t.integer "stamp_count", default: 0
+    t.integer "comment_count", default: 0
     t.bigint "user_id"
     t.bigint "store_id"
     t.datetime "created_at", null: false
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 2019_07_09_165240) do
   add_foreign_key "comments", "reviews"
   add_foreign_key "comments", "users"
   add_foreign_key "comments", "users", column: "in_reply_to_user_id"
+  add_foreign_key "direct_messages", "rooms"
   add_foreign_key "direct_messages", "users", column: "sender_id"
   add_foreign_key "entries", "rooms"
   add_foreign_key "entries", "users"

@@ -23,6 +23,8 @@ class Comment < ApplicationRecord
   has_many :likes, dependent: :destroy
 
   before_save :set_reply_to_user_id
+  after_save :increment_count
+  before_destroy :decrement_count
 
   validates :comment, presence: true, length: { maximum: 100 }
 
@@ -43,5 +45,13 @@ class Comment < ApplicationRecord
       comment = Comment.find_by(id: in_reply_to_id)
       self[:in_reply_to_user_id] = comment.user.id
     end
+  end
+
+  def increment_count
+    review.update_column(:comment_count, review.comment_count + 1)
+  end
+
+  def decrement_count
+    review.update_column(:comment_count, review.comment_count - 1)
   end
 end

@@ -30,8 +30,11 @@ class ReviewSerializer < ActiveModel::Serializer
   end
 
   def reactions
-    instance_options[:reaction_counts] || [].select do |r|
-      r[:review_id] === object.id
+    reactions = instance_options[:reaction_counts]
+    if reactions.present?
+      instance_options[:reaction_counts].map do |r|
+        { name: r[:name], count: r[:count], reacted: r[:reacted] } if r[:review_id] === object.id
+      end.compact
     end
   end
 end

@@ -30,7 +30,7 @@ class ReviewSerializer < ActiveModel::Serializer
   end
 
   def reactions
-    instance_options[:reaction_counts].select do |r|
+    instance_options[:reaction_counts] || [].select do |r|
       r[:review_id] === object.id
     end
   end

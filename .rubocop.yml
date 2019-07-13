@@ -4,6 +4,7 @@ inherit_from:
 
 #以下にはrubocopで検証したくないフォルダを指定する
 AllCops:
+  TargetRubyVersion: 2.5.1
   Exclude:
     - "db/**/*"
     - "bin/*"

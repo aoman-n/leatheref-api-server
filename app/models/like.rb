@@ -23,11 +23,11 @@ class Like < ApplicationRecord
 
   def increment_count
     comment = self.comment
-    comment.update_attributes(like_count: comment.like_count + 1)
+    comment.update_column(:like_count, comment.like_count + 1)
   end
 
   def decrement_count
     comment = self.comment
-    comment.update_attributes(like_count: comment.like_count - 1)
+    comment.update_column(:like_count, comment.like_count - 1)
   end
 end

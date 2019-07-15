@@ -18,7 +18,7 @@
 
 class ReviewSerializer < ActiveModel::Serializer
   attributes :id, :product_name, :content, :comment_count, :picture_path, :created_at
-  attribute :rating, key: :rara
+  attribute :rating
   attribute :store_name
   attribute :product_category_name
   attribute :reactions

@@ -26,6 +26,8 @@ class Review < ApplicationRecord
   has_many :review_reactions, dependent: :destroy
   has_many :reactions, through: :review_reactions
 
+  after_create_commit :broadcast_new_review
+
   mount_uploader :picture, PictureUploader
 
   delegate :name, to: :store, prefix: true
@@ -64,5 +66,14 @@ class Review < ApplicationRecord
     if picture.size > 5.megabytes
       errors.add(:picture, "should be less than 5MB")
     end
+  end
+
+  def broadcast_new_review
+    ActionCable
+      .server
+      .broadcast(
+        ReviewChannel::BROADCAST_CHANNEL,
+        self,
+      )
   end
 end

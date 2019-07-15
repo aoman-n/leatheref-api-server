@@ -3,11 +3,9 @@ class ApplicationController < ActionController::API
   include ResponseModule
   include Sessionable
 
-  # unless Rails.env.development?
-  # rescue_from Exception, with: :custom_error_500
-  # rescue_from ActiveRecord::RecordNotFound, with: :custom_error_404
-  # rescue_from ActionController::RoutingError, with: :custom_error_404
-  # end
+  rescue_from Exception, with: :custom_error_500
+  rescue_from ActiveRecord::RecordNotFound, with: :custom_error_404
+  rescue_from ActionController::RoutingError, with: :custom_error_404
 
   def hello
     puts 'hello!'

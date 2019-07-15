@@ -27,7 +27,7 @@ class ReviewsController < ApplicationController
       .joins(:reactions)
       .group("name, id")
       .select("reviews.*, reactions.name, COUNT(reviews.id) AS reaction_count, GROUP_CONCAT(review_reactions.user_id separator ',') AS user_ids")
-    .map { |r| { review_id: r.id, name: r.name, count: r.reaction_count, reacted: r.user_ids.split(',').map(&:to_i).include?(current_user&.id) } }
+      .map { |r| { review_id: r.id, name: r.name, count: r.reaction_count, reacted: r.user_ids.split(',').map(&:to_i).include?(current_user&.id) } }
 
     render json: ActiveModel::Serializer::CollectionSerializer.new(
       reviews,

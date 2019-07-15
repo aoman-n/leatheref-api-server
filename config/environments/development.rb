@@ -51,6 +51,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # allowed all url for action cable
+  config.action_cable.disable_request_forgery_protection = true
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.alert = true

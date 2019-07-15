@@ -20,6 +20,8 @@ module AuthApiServer
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
+    config.time_zone = 'Tokyo'
+    config.active_record.default_timezone = :local
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -29,6 +31,7 @@ module AuthApiServer
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    # config.action_cable.mount_path = '/cable'
     config.middleware.use Rack::Attack
 
     # omniauthで必要なため、セッションを有効化する

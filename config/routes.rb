@@ -14,6 +14,8 @@
 Rails.application.routes.draw do
   root to: 'application#hello'
 
+  mount ActionCable.server => '/cable'
+
   scope :api do
     get '/hello', to: 'application#hello'
     get '/auth/:provider/callback', to: 'sessions#create'

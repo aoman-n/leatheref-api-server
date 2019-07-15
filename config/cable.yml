@@ -1,10 +1,16 @@
 development:
-  adapter: async
+  adapter: redis
+  url: <%= ENV['REDIS_CONNECTION_STRING'] %>
+  channel_prefix: <%= ENV['REDIS_CHANNEL_PREFIX'] %>
+  # adapter: async
 
 test:
-  adapter: async
+  adapter: redis
+  url: <%= ENV['REDIS_CONNECTION_STRING'] %>
+  channel_prefix: <%= ENV['REDIS_CHANNEL_PREFIX'] %>
+  # adapter: async
 
 production:
   adapter: redis
-  url: redis://localhost:6379/1
-  channel_prefix: auth-api-server_production
+  url: <%= ENV['REDIS_CONNECTION_STRING'] %>
+  channel_prefix: <%= ENV['REDIS_CHANNEL_PREFIX'] %>

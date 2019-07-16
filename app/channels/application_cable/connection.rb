@@ -3,22 +3,21 @@ module ApplicationCable
     identified_by :current_user
 
     def connect
-      puts '---------------- connect!!!'
       self.current_user = find_verified_user
     end
 
     private
 
     def find_verified_user
-      p request.params
-      access_token = request.params[:'access-token']
-      p access_token
-      User.find_by(id: access_token) || nill
-      # if verified_user = User.find_by(id: cookies.encrypted[:user_id])
-      #   verified_user
-      # else
-      #   reject_unauthorized_connection
-      # end
+      access_token = request.params['access-token']
+
+      if access_token.present?
+        decode_token = DecodeToken.new(access_token)
+        user = decode_token.get_user
+        if user && user.valid_user?(decode_token.decoded_token['token'])
+          user
+        end
+      end
     end
   end
 end

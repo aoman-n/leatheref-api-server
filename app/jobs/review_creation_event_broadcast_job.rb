@@ -7,13 +7,11 @@ class ReviewCreationEventBroadcastJob < ApplicationJob
     serialized_review = ActiveModelSerializers::SerializableResource.new(
       review,
       serializer: BroadcastReviewSerializer,
-      adapter: :json
+      adapter: :json,
     ).as_json
-    ActionCable
-      .server
-      .broadcast(
-        ReviewChannel::BROADCAST_CHANNEL,
-        serialized_review[:review],
-      )
+    ActionCable.server.broadcast(
+      ReviewChannel::BROADCAST_CHANNEL,
+      serialized_review[:review],
+    )
   end
 end

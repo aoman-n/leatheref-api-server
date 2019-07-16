@@ -11,14 +11,19 @@ class UsersController < ApplicationController
     end
   end
 
-  # PATCH /api/users/:id
-  # MEMO: :idは使用してないためurlにも必要ないかも
+  # PATCH /api/users/:id MEMO: 「:id」は使用してないためurlにも必要ないかも
+  # TODO: 修正
+  # user情報をupdateするときに、コールバックでimage_urlを更新するとよさそう。トランザクション内でimage_urlをアップデートさせるため。
+  # image_urlを更新するかどうか(コールバックを実行するか)は、imageカラムが変更されたかどうかで分岐させる。
+  # もしくは、transactionで囲んでupdateするか。
   def update
     current_user.update!(update_user_params)
     current_user.update!(image_url: current_user.image.url)
     render current_user
   rescue => e
     p e
+    logger.error e.message
+    logger.error e.backtrace.join("\n")
     render json: { message: current_user.errors.full_messages }, status: 400
   end
 

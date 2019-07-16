@@ -24,7 +24,7 @@ class DirectMessagesController < ApplicationController
   def destroy
     message = DirectMessage.find(params[:id])
     if message.owner?
-      message.destroy
+      message.destroy!
       head :no_content
     else
       response_forbidden

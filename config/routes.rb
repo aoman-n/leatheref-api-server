@@ -16,6 +16,9 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   scope :api do
     get '/hello', to: 'application#hello'
     get '/auth/:provider/callback', to: 'sessions#create'

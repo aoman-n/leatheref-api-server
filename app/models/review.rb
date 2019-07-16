@@ -68,19 +68,7 @@ class Review < ApplicationRecord
     end
   end
 
-  # 投稿したレビューをシリアライズしてブロードキャストする
-  # TODO: 新しくシリアライザを作成したが、冗長なためひとつのreview_serializerを使えるようにする
   def broadcast_new_review
-    serialized_review = ActiveModelSerializers::SerializableResource.new(
-      self,
-      serializer: BroadcastReviewSerializer,
-      adapter: :json
-    ).as_json
-    ActionCable
-      .server
-      .broadcast(
-        ReviewChannel::BROADCAST_CHANNEL,
-        serialized_review[:review],
-      )
+    ReviewCreationEventBroadcastJob.perform_later(self)
   end
 end

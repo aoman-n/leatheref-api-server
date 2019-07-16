@@ -370,6 +370,8 @@ GEM
       nokogiri (~> 1.5)
       optimist (~> 3.0)
     redis (4.1.2)
+    redis-namespace (1.6.0)
+      redis (>= 3.0.4)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -468,6 +470,7 @@ DEPENDENCIES
   rails (~> 5.2)
   rb-readline
   redis (~> 4.0)
+  redis-namespace (~> 1.5)
   rspec-rails (~> 3.7)
   rubocop-airbnb
   shoulda-matchers!

@@ -21,6 +21,8 @@ class Like < ApplicationRecord
   after_save :increment_count
   after_destroy :decrement_count
 
+  private
+
   def increment_count
     comment = self.comment
     comment.update_column(:like_count, comment.like_count + 1)

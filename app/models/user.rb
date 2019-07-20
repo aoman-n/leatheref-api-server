@@ -46,6 +46,8 @@ class User < ApplicationRecord
   has_many :rooms, through: :entries
   has_many :review_reactions, dependent: :destroy
   has_many :reactions, through: :review_reactions
+  belongs_to :love_store, foreign_key: 'love_store_id',
+                          class_name: 'Store', optional: true
 
   validates :display_name, length: { maximum: 20 }
   VALID_LOGIN_NAME_REGEX = /[0-9A-Za-z]+/i

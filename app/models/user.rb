@@ -27,8 +27,8 @@ class User < ApplicationRecord
 
   # callback
   before_create :create_activation_digest
+  before_create :set_display_name
   before_save :downcase_email
-  before_save :set_display_name
 
   has_secure_password validations: false
 

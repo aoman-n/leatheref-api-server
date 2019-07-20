@@ -48,12 +48,28 @@ class Review < ApplicationRecord
   scope :category_with, -> (category_id) {
     joins(:product_category).where(product_categories: { id: category_id })
   }
+  scope :reaction_counts, -> (review_ids) {
+    where(id: review_ids)
+      .joins(:reactions)
+      .group("name, id")
+      .select("reviews.*, reactions.name, COUNT(reviews.id) AS reaction_count, GROUP_CONCAT(review_reactions.user_id separator ',') AS user_ids")
+  }
   # scope :with_store?, -> (store) {
   #   store ? store_with(store) : tap {}
   # }
   # scope :with_category?, -> (category_id) {
   #   category_id ? category_with(category_id) : tap {}
   # }
+
+  def self.get_filtering_list(params)
+    params.permit!.slice(:store, :category).to_hash.compact
+  end
+
+  def self.base_active_record(page: 1, per_page: 10)
+    page ||= 1
+    per_page ||= 10
+    Review.page(page).per(per_page).recent
+  end
 
   def picture_path
     picture.url

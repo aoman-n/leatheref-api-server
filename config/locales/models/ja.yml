@@ -2,6 +2,8 @@ ja:
   activerecord:
     models:
       user: ユーザー
+      review: 商品レビュー
+      comment: レビューへのコメント
     attributes:
       user:
         id: ID
@@ -13,3 +15,18 @@ ja:
         created_at: 登録日時
         updated_at: 更新日時
         password: パスワード
+      review:
+        id: ID
+        product_name: 商品名
+        content: レビュー内容
+        picture: 商品写真
+        price: 価格
+        rating: レート
+        comment_count: コメント数
+        created_at: 登録日時
+        updated_at: 更新日時
+      comments:
+        id: ID
+        comment: コメント
+        created_at: 登録日時
+        updated_at: 更新日時

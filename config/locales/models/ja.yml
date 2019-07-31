@@ -4,6 +4,7 @@ ja:
       user: ユーザー
       review: 商品レビュー
       comment: レビューへのコメント
+      community: コミュニティ
     attributes:
       user:
         id: ID
@@ -30,3 +31,7 @@ ja:
         comment: コメント
         created_at: 登録日時
         updated_at: 更新日時
+      community:
+        title: タイトル
+        description: 説明
+        owner: オーナー

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_20_075750) do
+ActiveRecord::Schema.define(version: 2019_07_30_123719) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -26,6 +26,28 @@ ActiveRecord::Schema.define(version: 2019_07_20_075750) do
     t.index ["in_reply_to_user_id"], name: "index_comments_on_in_reply_to_user_id"
     t.index ["review_id"], name: "index_comments_on_review_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "communities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "permittion_level", default: 0
+    t.string "symbol_image"
+    t.bigint "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_communities_on_owner_id"
+    t.index ["title"], name: "index_communities_on_title", unique: true
+  end
+
+  create_table "community_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "community_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_community_members_on_community_id"
+    t.index ["user_id", "community_id"], name: "index_community_members_on_user_id_and_community_id", unique: true
+    t.index ["user_id"], name: "index_community_members_on_user_id"
   end
 
   create_table "direct_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -151,6 +173,9 @@ ActiveRecord::Schema.define(version: 2019_07_20_075750) do
   add_foreign_key "comments", "reviews"
   add_foreign_key "comments", "users"
   add_foreign_key "comments", "users", column: "in_reply_to_user_id"
+  add_foreign_key "communities", "users", column: "owner_id"
+  add_foreign_key "community_members", "communities"
+  add_foreign_key "community_members", "users"
   add_foreign_key "direct_messages", "rooms"
   add_foreign_key "direct_messages", "users", column: "sender_id"
   add_foreign_key "entries", "rooms"

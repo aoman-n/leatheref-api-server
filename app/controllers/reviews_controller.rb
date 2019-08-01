@@ -42,7 +42,7 @@ class ReviewsController < ApplicationController
 
   def update
     if @review.update_attributes(review_params)
-      render json: @review, status: 204
+      render json: @review
     else
       response_bad_request
     end

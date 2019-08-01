@@ -55,5 +55,7 @@ Rails.application.routes.draw do
       post :join, to: 'rooms#join', on: :member
       delete :leave, to: 'rooms#leave', on: :member
     end
+
+    resources :communities
   end
 end

@@ -22,7 +22,7 @@
 #
 
 FactoryBot.define do
-  factory :user, class: User do
+  factory :user, class: User, aliases: [:owner] do
     sequence(:login_name) { |n| "hoge#{n}" }
     sequence(:email) { |n| "hoge#{n}@example.com" }
     # login_name { 'hogekun' }

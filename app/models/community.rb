@@ -3,6 +3,8 @@ class Community < ApplicationRecord
   has_many :users, through: :community_members
   belongs_to :owner, class_name: "User"
 
+  mount_uploader :symbol_image, SymbolImageUploader
+
   validates :title, presence: true,
                     length: { maximum: 30 },
                     uniqueness: { case_sensitive: false }

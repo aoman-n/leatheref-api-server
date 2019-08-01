@@ -6,6 +6,7 @@ inherit_from:
 AllCops:
   TargetRubyVersion: 2.5.1
   Exclude:
+    - 'spec/**/*'
     - "db/**/*"
     - "bin/*"
     - "config/environments/*"
@@ -20,6 +21,11 @@ AllCops:
 
 Metrics/AbcSize:
   Max: 24
+
+Metrics/LineLength:
+  Max: 160
+  Exclude:
+    - "db/migrate/*.rb"
 
 Style/Documentation:
   Enabled: false
@@ -39,6 +45,9 @@ Layout/DotPosition:
 # and returnを許可
 Style/AndOr:
   EnforcedStyle: conditionals
+
+Style/BlockDelimiters:
+  Enabled: false
 
 # Layout/MultilineMethodCallIndentation:
 #   EnforcedStyle: aligned

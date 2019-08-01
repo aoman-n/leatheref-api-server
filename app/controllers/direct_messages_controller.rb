@@ -3,17 +3,7 @@ class DirectMessagesController < ApplicationController
   before_action :joined_user?
 
   def create
-    data_type = params[:data_type]
-    case data_type
-    when 'message'
-      message_params = params_with_message
-    when 'image'
-      message_params = params_with_image
-    else
-      response_bad_request and return
-    end
-
-    direct_message = @room.direct_messages.new(message_params)
+    direct_message = @room.direct_messages.new(message_params(params[:data_type]))
     if direct_message.save
       render json: direct_message
     else
@@ -37,6 +27,17 @@ class DirectMessagesController < ApplicationController
     @room = Room.find(params[:room_id])
     unless @room.current_user_exists?(current_user)
       response_forbidden
+    end
+  end
+
+  def message_params(type)
+    case type
+    when 'message'
+      params_with_message
+    when 'image'
+      params_with_image
+    else
+      response_bad_request and return
     end
   end
 

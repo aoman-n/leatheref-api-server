@@ -11,9 +11,16 @@ module ResponseModule
     }
   end
 
+  # 204 Deleted
+  def response_deleted
+    render json: { message: 'deleted' }, status: 204
+  end
+
   # 400 Bad Request
-  def response_bad_request
-    render status: 400, json: { status: 400, message: 'Bad Request' }
+  def response_bad_request(error_messages = nil)
+    json = { type: 'Bad Request' }
+    json.merge!({ message: error_messages }) if error_messages.present?
+    render status: 400, json: json
   end
 
   # 401 Unauthorized
@@ -27,8 +34,10 @@ module ResponseModule
   end
 
   # 404 Not Found
-  def response_not_found(class_name = 'page')
-    render status: 404, json: { status: 404, message: "#{class_name.capitalize} Not Found" }
+  def response_not_found(class_name = nil)
+    json = { type: 'Not Found' }
+    json.merge!({ message: "#{class_name.capitalize} Not Found" }) if class_name.pesent?
+    render status: 404, json: json
   end
 
   def custom_error_404(error = nil)

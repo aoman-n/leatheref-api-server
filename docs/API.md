@@ -247,3 +247,29 @@ params: { user_ids: [number...] }
 `DELETE /api/direct_messages/:id`
 
 ダイレクトメッセージを削除
+
+## コミュニティ
+
+`GET /api/communities`
+
+コミュニティ一覧を取得
+
+`POST /api/communities`
+
+コミュニティの作成
+```json
+{
+  "title": "string",
+  "description": "string",
+  "symbol_image": "file",
+  "permittion_level": "number",
+}
+```
+
+`GET /api/communities/:id`
+
+コミュニティの詳細を取得
+
+`DELETE /api/communities/:id`
+
+コミュニティの削除

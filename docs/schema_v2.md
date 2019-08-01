@@ -237,24 +237,27 @@ Model: Store
 
 |column|type|options|
 |---|---|---|
-|name|string|not null|
-|description|text||
-|join_condition|integer|enum -> {0: public, 1: approval}|
-|image|string||
-|owner_id(FK)|integer||
-|category_id(FK)|integer||
+|title|string|not null|
+|description|text|not null|
+|permission_level|integer|enum -> {0: public, 1: approval}|
+|symbol_image|string||
+|owner_id(FK->users)|integer||
 
-### categories
-コミュニティのカテゴリー
+### community_tag_relations
 
-Model: **Category**
-- has_many :communities
+|column|type|options|
+|---|---|---|
+|community_id(FK)|integer|not null|
+|tag_id(FK)|integer||
+
+### community_tags
+コミュニティのタグ
 
 |column|type...|options|
 |---|---|---|
-|category_name|string|not null|
+|tag_name|string|not null|
 
-### community_conversations
+### community_messages
 コミュニティに対する全体投稿
 
 - belogs_to :community
@@ -265,7 +268,19 @@ Model: **Category**
 |community_id(FK)|integer||
 |user_id(FK)|integer||
 |message|text||
-|picture|string||
+|photo|string||
+|like_count|integer||
+|in_reply_to_id(FK)|integer||自己結合|
+|reply|boolean||リプライかどうか|
+|in_reply_to_user_id(FK)|integer||リプライするコメントをしたユーザーを識別|
+
+### topic_message_likes
+コミュニティのトピック内のメッセージに対するいいね！
+
+|column|type|options|
+|---|---|---|
+|topic_message_id(FK)|integer||
+|user_id(FK)|integer||
 
 ### topics
 コミュニティのトピック
@@ -292,14 +307,26 @@ Model: **Category**
 |topic_id(FK)|integer||
 |content|text||
 |picture|string||
+|like_count|integer||
 
-### topic_message_likes
-コミュニティのトピック内のメッセージに対するいいね！
+### join_requests
+コミュニティへの参加申請情報
 
-|column|type|options|
-|---|---|---|
-|topic_message_id(FK)|integer||
-|user_id(FK)|integer||
+|column|type|options||
+|---|---|---|---|
+|user_id(FK)|integer|||
+|community_id(FK)|integer|||
+|message|text|not null||
+|admitted|boolean|コミュニティへの参加の承認|default: false|
+
+### community_members
+コミュニティのメンバー
+
+|column|type|options||
+|---|---|---|---|
+|community_id(FK)|integer|||
+|member_id(FK users)|integer|||
+|admitted|boolean|コミュニティへの参加承認|デフォルトでtrue, 許可制ならばfalseにしておく|
 
 ### events(WIP)
 コミュニティのイベント
@@ -312,21 +339,3 @@ Model: **Category**
 |address|string||
 |capacity|integer||
 |description|text|詳細説明|
-
-### requests
-コミュニティへの参加申請情報
-
-|column|type|options|
-|---|---|---|
-|user_id(FK)|integer||
-|community_id(FK)|integer||
-|message|text|not null|
-
-### communities_members
-コミュニティのメンバー
-
-|column|type|options|
-|---|---|---|
-|community_id(FK)|integer||
-|member_id(FK users)|integer||
-|admitted|boolean|コミュニティへの参加承認|

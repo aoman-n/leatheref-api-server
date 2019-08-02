@@ -5,8 +5,9 @@ class CommunitiesController < ApplicationController
   before_action :community_owner?, only: %i(update destroy)
 
   def index
-    communities = Community.recent
-    render json: communities
+    communities = paginate Community.fetch_list(page: params[:page],
+                                                per_page: params[:per_page])
+    render json: communities, each_serializer: CommunitySerializer, include: ['users']
   end
 
   def create

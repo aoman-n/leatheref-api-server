@@ -41,13 +41,13 @@ ActiveRecord::Schema.define(version: 2019_07_30_123719) do
   end
 
   create_table "community_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "member_id"
     t.bigint "community_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["community_id"], name: "index_community_members_on_community_id"
-    t.index ["user_id", "community_id"], name: "index_community_members_on_user_id_and_community_id", unique: true
-    t.index ["user_id"], name: "index_community_members_on_user_id"
+    t.index ["member_id", "community_id"], name: "index_community_members_on_member_id_and_community_id", unique: true
+    t.index ["member_id"], name: "index_community_members_on_member_id"
   end
 
   create_table "direct_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -175,7 +175,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_123719) do
   add_foreign_key "comments", "users", column: "in_reply_to_user_id"
   add_foreign_key "communities", "users", column: "owner_id"
   add_foreign_key "community_members", "communities"
-  add_foreign_key "community_members", "users"
+  add_foreign_key "community_members", "users", column: "member_id"
   add_foreign_key "direct_messages", "rooms"
   add_foreign_key "direct_messages", "users", column: "sender_id"
   add_foreign_key "entries", "rooms"

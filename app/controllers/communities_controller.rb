@@ -7,7 +7,7 @@ class CommunitiesController < ApplicationController
   def index
     communities = paginate Community.fetch_list(page: params[:page],
                                                 per_page: params[:per_page])
-    render json: communities, each_serializer: CommunitySerializer, include: ['users']
+    render json: communities, each_serializer: CommunitySerializer, include: ['members']
   end
 
   def create

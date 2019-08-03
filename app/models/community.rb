@@ -1,6 +1,6 @@
 class Community < ApplicationRecord
   has_many :community_members
-  has_many :users, through: :community_members
+  has_many :members, class_name: "User", through: :community_members
   belongs_to :owner, class_name: "User"
 
   mount_uploader :symbol_image, SymbolImageUploader
@@ -22,6 +22,6 @@ class Community < ApplicationRecord
     page = args[:page] || 1
     per_page = args[:per_page] || DEFAULT_PER_PAGE
     per_page = MAX_PER_PAGE if per_page > MAX_PER_PAGE
-    Community.page(page).per(per_page).recent.eager_load(:owner).preload(:users)
+    Community.page(page).per(per_page).recent.eager_load(:owner).preload(:members)
   end
 end

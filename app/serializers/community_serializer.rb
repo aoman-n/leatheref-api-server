@@ -8,7 +8,7 @@ class CommunitySerializer < ActiveModel::Serializer
   # has_many :users
 
   def members_count
-    object.users.length
+    object.members.length
   end
 
   def symbol_image_path

@@ -25,8 +25,6 @@ FactoryBot.define do
   factory :user, class: User, aliases: [:owner] do
     sequence(:login_name) { |n| "hoge#{n}" }
     sequence(:email) { |n| "hoge#{n}@example.com" }
-    # login_name { 'hogekun' }
-    # email { 'hogekun@example.com' }
     password { 'password' }
     password_confirmation { 'password' }
     admin { false }

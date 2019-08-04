@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_123719) do
+ActiveRecord::Schema.define(version: 2019_08_04_121017) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -79,6 +79,17 @@ ActiveRecord::Schema.define(version: 2019_07_30_123719) do
     t.index ["target_user_id"], name: "index_follows_on_target_user_id"
     t.index ["user_id", "target_user_id"], name: "index_follows_on_user_id_and_target_user_id", unique: true
     t.index ["user_id"], name: "index_follows_on_user_id"
+  end
+
+  create_table "join_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "community_id", null: false
+    t.text "message", null: false
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_join_requests_on_community_id"
+    t.index ["user_id"], name: "index_join_requests_on_user_id"
   end
 
   create_table "likes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -182,6 +193,8 @@ ActiveRecord::Schema.define(version: 2019_07_30_123719) do
   add_foreign_key "entries", "users"
   add_foreign_key "follows", "users"
   add_foreign_key "follows", "users", column: "target_user_id"
+  add_foreign_key "join_requests", "communities"
+  add_foreign_key "join_requests", "users"
   add_foreign_key "likes", "comments"
   add_foreign_key "likes", "users"
   add_foreign_key "review_reactions", "reactions"

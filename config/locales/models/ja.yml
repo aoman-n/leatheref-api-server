@@ -5,6 +5,7 @@ ja:
       review: 商品レビュー
       comment: レビューへのコメント
       community: コミュニティ
+      join_request: コミュニティ参加申請
     attributes:
       user:
         id: ID
@@ -35,3 +36,6 @@ ja:
         title: タイトル
         description: 説明
         owner: オーナー
+      join_request:
+        message: メッセージ
+        status: 申請状況

@@ -7,7 +7,7 @@ RSpec.describe Community, type: :model do
       Community.new(
         title: 'test community title',
         description: 'test community description',
-        permittion_level: 'anyone',
+        permittion_level: 'public',
         owner: user,
       )
     end
@@ -34,7 +34,7 @@ RSpec.describe Community, type: :model do
       new_commutity = Community.new(
         title: 'test community title',
         description: 'test community description',
-        permittion_level: 'anyone',
+        permittion_level: 'public',
         owner: user,
       )
       new_commutity.valid?
@@ -65,13 +65,13 @@ RSpec.describe Community, type: :model do
     it '#recent' do
       Community.create(title: 'test community title 1',
                        description: 'test community description',
-                       permittion_level: 'anyone',
+                       permittion_level: 'public',
                        owner: user,
                        created_at: 1.day.ago,
                        updated_at: 1.day.ago)
       Community.create(title: 'test community title 2',
                        description: 'test community description',
-                       permittion_level: 'anyone',
+                       permittion_level: 'public',
                        owner: user,
                        created_at: 1.day.from_now,
                        updated_at: 1.day.from_now)

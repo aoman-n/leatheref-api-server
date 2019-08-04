@@ -11,7 +11,7 @@ class Community < ApplicationRecord
   validates :description, presence: true,
                           length: { maximum: 300 }
 
-  enum permittion_level: { anyone: 0, approval: 1 }
+  enum permittion_level: { public: 0, approval: 1 }, _prefix: true
 
   scope :recent, -> { order(updated_at: :desc) }
 

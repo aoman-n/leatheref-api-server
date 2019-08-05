@@ -30,7 +30,7 @@ module ResponseModule
 
   # 403 Forbidden
   def response_forbidden
-    render status: 402, json: { status: 402, message: 'Forbidden' }
+    render status: 403, json: { status: 403, message: 'Forbidden' }
   end
 
   # 404 Not Found

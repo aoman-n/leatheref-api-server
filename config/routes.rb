@@ -56,6 +56,13 @@ Rails.application.routes.draw do
       delete :leave, to: 'rooms#leave', on: :member
     end
 
-    resources :communities
+    resources :communities do
+      post :join, on: :member
+      delete :leave, on: :member
+      resources :join_requests, only: %i(index create show) do
+        post :accept, on: :member
+        post :reject, on: :member
+      end
+    end
   end
 end

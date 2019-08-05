@@ -2,6 +2,7 @@ class Community < ApplicationRecord
   has_many :community_members
   has_many :members, class_name: "User", through: :community_members
   belongs_to :owner, class_name: "User"
+  has_many :join_requests
 
   mount_uploader :symbol_image, SymbolImageUploader
 
@@ -23,5 +24,17 @@ class Community < ApplicationRecord
     per_page = args[:per_page] || DEFAULT_PER_PAGE
     per_page = MAX_PER_PAGE if per_page > MAX_PER_PAGE
     Community.page(page).per(per_page).recent.eager_load(:owner).preload(:members)
+  end
+
+  def public?
+    permittion_level == 'public'
+  end
+
+  def approval?
+    permittion_level == 'approval'
+  end
+
+  def member?(user)
+    community_members.where(member_id: user.id).exists?
   end
 end

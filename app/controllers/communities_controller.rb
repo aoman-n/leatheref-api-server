@@ -1,7 +1,7 @@
 class CommunitiesController < ApplicationController
   before_action :authenticate!, except: :index
-  before_action :community_member?, only: :show
   before_action :set_community, except: %i(index create)
+  before_action :community_member?, only: %i(show leave)
   before_action :community_owner?, only: %i(update destroy)
 
   def index
@@ -39,6 +39,26 @@ class CommunitiesController < ApplicationController
     end
   end
 
+  def join
+    response_forbidden and return if @community.approval?
+
+    community_member = @community.community_members.new(member_id: current_user.id)
+    if community_member.save
+      render json: { message: '参加しました' }
+    else
+      response_bad_request(community_member.errors.full_messages)
+    end
+  end
+
+  def leave
+    community_member = CommunityMember.find_by(member_id: current_user.id, community_id: @community.id)
+    if community_member.destroy
+      head :no_content
+    else
+      response_bad_request
+    end
+  end
+
   private
 
   def community_params
@@ -50,13 +70,13 @@ class CommunitiesController < ApplicationController
     ).merge(owner_id: current_user.id)
   end
 
-  def community_member?
-    # implement
-  end
-
   def set_community
     @community = Community.find_by(id: params[:id])
     response_not_found('Community') if @community.nil?
+  end
+
+  def community_member?
+    response_forbidden and return unless @community.member?(current_user)
   end
 
   def community_owner?

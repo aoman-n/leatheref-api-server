@@ -50,6 +50,7 @@ class User < ApplicationRecord
                           class_name: 'Store', optional: true
   has_many :community_members, foreign_key: "member_id"
   has_many :communities, through: :community_members
+  has_many :join_requests
 
   validates :display_name, length: { maximum: 20 }
   VALID_LOGIN_NAME_REGEX = /[0-9A-Za-z]+/i

@@ -23,6 +23,7 @@ class Like < ApplicationRecord
 
   private
 
+  # commentクラスに問い合わせるような形にする
   def increment_count
     comment = self.comment
     comment.update_column(:like_count, comment.like_count + 1)

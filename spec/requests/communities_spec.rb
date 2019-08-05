@@ -79,13 +79,13 @@ RSpec.describe 'CommunitiesController', type: :request do
       end
 
       context 'コミュニティのオーナーではないユーザーのリクエスト' do
-        it 'コミュニティを削除出来ず、402が返ってくること' do
+        it 'コミュニティを削除出来ず、403が返ってくること' do
           token = log_in_as(other_user)
           aggregate_failures do
             expect {
               delete community_path(community), headers: generate_login_header(token)
             }.to_not change(Community, :count)
-            expect(response).to have_http_status '402'
+            expect(response).to have_http_status '403'
           end
         end
       end
@@ -122,12 +122,12 @@ RSpec.describe 'CommunitiesController', type: :request do
       end
 
       context 'コミュニティのオーナーではないユーザーのリクエスト' do
-        it 'コミュニティを編集出来ず、402が返ってくること' do
+        it 'コミュニティを編集出来ず、403が返ってくること' do
           token = log_in_as(other_user)
           aggregate_failures do
             put community_path(community), headers: generate_login_header(token), params: { title: 'update hoge!' }
             expect(community.reload[:title]).to eq 'no update hoge'
-            expect(response).to have_http_status '402'
+            expect(response).to have_http_status '403'
           end
         end
       end
@@ -174,6 +174,67 @@ RSpec.describe 'CommunitiesController', type: :request do
 
       context '公開レベルがapprovalの時' do
         it 'コミュニティ詳細を取得出来ないこと'
+      end
+    end
+  end
+
+  describe 'POST: /api/communities/:id/join - コミュニティ参加' do
+    let(:owner_user) { FactoryBot.create(:user) }
+    let(:other_user) { FactoryBot.create(:user) }
+    let(:community) { FactoryBot.create(:community, owner: owner_user) }
+    let(:approval_community) { FactoryBot.create(:community, :approval) }
+
+    describe '認証済みのユーザーとして' do
+      context 'コミュニティの公開レベルがpublicの場合' do
+        it 'コミュニティに参加出来ること' do
+          token = log_in_as(other_user)
+          expect {
+            post join_community_path(community), headers: generate_login_header(token)
+          }.to change(CommunityMember, :count).by(1)
+          expect(response).to have_http_status '200'
+        end
+
+        it '二重に参加出来ないこと'
+        it 'オーナーは参加出来ないこと'
+      end
+
+      context 'コミュニティの公開レベルがapprovalの場合' do
+        it 'コミュニティに参加出来ないこと' do
+          token = log_in_as(other_user)
+          expect {
+            post join_community_path(approval_community), headers: generate_login_header(token)
+          }.to_not change(CommunityMember, :count)
+          expect(response).to have_http_status '403'
+        end
+      end
+    end
+  end
+
+  describe 'DELETE: /api/communities/:id/leave - コミュニティ退会' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:community) { FactoryBot.create(:community) }
+    let(:other_community) { FactoryBot.create(:community) }
+    let!(:community_member) {
+      CommunityMember.create(member_id: user.id, community_id: community.id)
+    }
+
+    context '参加中のコミュニティであれば' do
+      it '正常に退会できること' do
+        token = log_in_as(user)
+        expect {
+          delete leave_community_path(community), headers: generate_login_header(token)
+        }.to change(CommunityMember, :count).by(-1)
+        expect(response).to have_http_status '204'
+      end
+    end
+
+    context '参加していないコミュニティであれば' do
+      it '退会出来ないこと' do
+        token = log_in_as(user)
+        expect {
+          delete leave_community_path(other_community), headers: generate_login_header(token)
+        }.to_not change(CommunityMember, :count)
+        expect(response).to have_http_status '403'
       end
     end
   end

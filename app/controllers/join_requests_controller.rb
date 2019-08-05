@@ -17,8 +17,6 @@ class JoinRequestsController < ApplicationController
   end
 
   def create
-    puts '---------------create'
-    p params
     join_request = JoinRequest.new(join_request_params)
     if join_request.save
       render json: join_request, status: 201

@@ -3,6 +3,7 @@ class Community < ApplicationRecord
   has_many :members, class_name: "User", through: :community_members
   belongs_to :owner, class_name: "User"
   has_many :join_requests
+  has_many :topics, dependent: :destroy
 
   mount_uploader :symbol_image, SymbolImageUploader
 
@@ -19,6 +20,7 @@ class Community < ApplicationRecord
   MAX_PER_PAGE = 30
   DEFAULT_PER_PAGE = 10
 
+  # TODO: これmodule化
   def self.fetch_list(args = {})
     page = args[:page] || 1
     per_page = args[:per_page] || DEFAULT_PER_PAGE

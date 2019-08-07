@@ -63,6 +63,7 @@ Rails.application.routes.draw do
         post :accept, on: :member
         post :reject, on: :member
       end
+      resources :comeets, controller: :community_comeets, shallow: true
     end
   end
 end

@@ -1,6 +1,7 @@
 class JoinRequestsController < ApplicationController
   before_action :authenticate!
   before_action :set_community
+  before_action :require_approval_commutniy
   before_action :require_community_owner, except: :create
   before_action :set_join_request, only: %i(show accept reject)
 
@@ -17,6 +18,8 @@ class JoinRequestsController < ApplicationController
   end
 
   def create
+    response_bad_request(['コミュニティのオーナーはリクエストを作成できません。']) and return if @community.owner?(current_user)
+
     join_request = JoinRequest.new(join_request_params)
     if join_request.save
       render json: join_request, status: 201
@@ -58,6 +61,10 @@ class JoinRequestsController < ApplicationController
   def set_community
     @community = Community.find_by(id: params[:community_id])
     response_not_found('join request') if @community.nil?
+  end
+
+  def require_approval_commutniy
+    response_bad_request(['public community']) unless @community.approval?
   end
 
   def set_join_request

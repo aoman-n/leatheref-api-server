@@ -37,4 +37,8 @@ class Community < ApplicationRecord
   def member?(user)
     community_members.where(member_id: user.id).exists?
   end
+
+  def owner?(user)
+    owner.id == user.id
+  end
 end

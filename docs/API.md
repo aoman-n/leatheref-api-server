@@ -254,6 +254,19 @@ params: { user_ids: [number...] }
 
 コミュニティ一覧を取得
 
+query params
+```
+per_page: 1ページに何件表示するか
+page: page番号
+```
+
+response
+```
+[
+  {},
+]
+```
+
 `POST /api/communities`
 
 コミュニティの作成
@@ -262,7 +275,7 @@ params: { user_ids: [number...] }
   "title": "string",
   "description": "string",
   "symbol_image": "file",
-  "permittion_level": "number",
+  "permittion_level": "number"
 }
 ```
 
@@ -273,3 +286,38 @@ params: { user_ids: [number...] }
 `DELETE /api/communities/:id`
 
 コミュニティの削除
+
+`POST /api/communities/:id/join`
+
+コミュニティへ参加
+
+`DELETE /api/communities/:id/leave`
+
+コミュニティ退会
+
+## コミュニティへの参加申請
+
+`GET: /api/communities/:community_id/join_requests`
+
+コミュニティに対する参加申請一覧を取得
+
+`POST: /api/communities/:community_id/join_requests`
+
+コミュニティに対して参加申請を送る
+```json
+{
+  "message": "string"
+}
+```
+
+`GET: /api/communities/:community_id/join_requests/:id`
+
+参加申請の詳細を取得
+
+`POST: /api/communities/:community_id/join_requests/:id/accept`
+
+参加申請を許可
+
+`POST: /api/communities/:community_id/join_requests/:id/reject`
+
+参加申請を拒否

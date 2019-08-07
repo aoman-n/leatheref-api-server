@@ -40,22 +40,58 @@ RSpec.describe 'JoinRequests', type: :request do
     end
   end
 
-  describe 'POST: /api/communities/:community_id/join_requests - リクエストの作成' do
-    context 'ゲストユーザー' do
+  describe 'POST: /api/communities/:community_id/join_requests - リクエストの作成', focus: true do
+    let(:owner_user) { FactoryBot.create(:user, login_name: 'god') }
+    let(:not_member_user) { FactoryBot.create(:user, login_name: 'shit') }
+    let!(:member_user) { FactoryBot.create(:user, login_name: 'requeskun') }
+    let!(:approval_community) { FactoryBot.create(:community, :approval, owner: owner_user) }
+    let!(:community_member) { CommunityMember.create(community_id: approval_community.id, member_id: member_user.id) }
+
+    before do
+      @request_params = { message: '承認よろ！' }
     end
 
-    describe '認証済みのユーザー' do
+    describe 'publicなコミュニティ' do
+      let!(:public_community) { FactoryBot.create(:community, owner: owner_user) }
+
+      it 'リクエストを作成出来ないこと' do
+        token = log_in_as(not_member_user)
+        expect {
+          post community_join_requests_path(public_community), headers: generate_login_header(token), params: @request_params
+        }.to_not change(JoinRequest, :count)
+        expect(response).to have_http_status '400'
+      end
+    end
+
+    describe 'approvalなコミュニティ' do
       context 'コミュニティのメンバーではないユーザーのとき' do
         it 'リクエストを作成出来ること' do
+          token = log_in_as(not_member_user)
+          expect {
+            post community_join_requests_path(approval_community), headers: generate_login_header(token), params: @request_params
+          }.to change(JoinRequest, :count).by(1)
+          expect(response).to have_http_status '201'
         end
       end
 
       context 'コミュニティメンバーの場合' do
-        it 'リクエストを作成出来ないこと'
+        it 'リクエストを作成出来ないこと' do
+          token = log_in_as(member_user)
+          expect {
+            post community_join_requests_path(approval_community), headers: generate_login_header(token), params: @request_params
+          }.to_not change(JoinRequest, :count)
+          expect(response).to have_http_status '400'
+        end
       end
 
       context 'コミュニティのオーナーの場合' do
-        it 'リクエストを作成出来ないこと'
+        it 'リクエストを作成出来ないこと' do
+          token = log_in_as(owner_user)
+          expect {
+            post community_join_requests_path(approval_community), headers: generate_login_header(token), params: @request_params
+          }.to_not change(JoinRequest, :count)
+          expect(response).to have_http_status '400'
+        end
       end
     end
   end

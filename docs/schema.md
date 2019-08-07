@@ -3,14 +3,13 @@
 ### users
 ユーザーの情報
 
-Model: **User**
 - has_one :profile
 - has_many :follows
 - has_many :direct_messages
-- has_many :microposts
+- has_many :reviews
 - has_many :comments
 - has_many :favorites
-- has_many :micropost_likes
+- has_many :review_likes
 - has_many :communities
 - has_many :community_conversations
 - has_many :topics
@@ -18,7 +17,8 @@ Model: **User**
 
 |column|type...|options|desc|
 |---|---|---|---|
-|name|string|not null||
+|display_name|string|||
+|login_name|string|not null|||
 |email|string|||
 |image_url|string|||
 |password_digest|string|||
@@ -33,11 +33,11 @@ Model: **User**
 |updatee_at|datetime|||
 |uid|string||twitter OAuthで使用|
 |provider|string||twitter OAuthで使用|
+|access_count|integer||他ユーザーにレビューを表示された数|
 
 ### profiles
 ユーザーの補足情報
 
-Modle: **Profile**
 - belongs_to :prefecture
 
 |column|type|options||
@@ -52,15 +52,14 @@ Modle: **Profile**
 ### prefectures
 都道府県だよん
 
-Model: **Prefecture**
 - has_many :profiles
 
 |column|type|options|
 |---|---|---|
-|prefecture_name||
+|prefecture_name||n
 |prefecture_name_kana||
 
-### follows
+### followers
 ユーザー間のフォロー、フォロワー
 
 Model: **Follow**
@@ -75,56 +74,122 @@ Model: **Follow**
 ### direct_messages
 ユーザー間のダイレクトメッセージの保存
 
-Model: **DirectMessage**
 - belongs_to :sender, class_name: "User"
-- belongs_to :receiver, class_name: "User"
+- belongs_to :room
 
 |column|type|options|
 |---|---|---|
 |sender_id(FK)|integer||
-|receiver_id(FK)|integer||
-|text|text||
+|room_id(FK)|integer||
+|text|text|not null|
 |picture|string||
 
-### microposts
-メイン投稿
+### rooms
+ダイレクトメッセージの部屋
 
-Model: **Micropost**
-- belogs_to :user
-- has_many :comments
-- has_many :microposts_tags
-- has_many :tags, through: :microposts_tags
-- has_many :favorites
-- has_many :micropost_likes
+- has_many :users
+- has_many :direct_messages
 
-|column|type...|options|
+|column|type|options|
 |---|---|---|
+|id|integer||
+|updated_at|datetime||
+
+### entries
+どのUserがどのRoomに所属しているか
+
+|column|type|options|
+|---|---|---|
+|room_id(FK)|integer||
 |user_id(FK)|integer||
-|content|text||
-|picture|string||
-|price|integer||
-|brand|string||
+
+### stores
+コンビニ社の管理テーブル
+
+Model: Store
+- has_many :reviews
+
+|column|type...|options|comment|
+|---|---|---|---|
+|name|string|null: false||
+
+### reviews
+レビューの投稿テーブル
+
+- belongs_to :user
+- belongs_to :store
+- belongs_to :product_category
+- has_many :comments
+- has_many :reviews_tags
+- has_many :tags, through: :reviews_tags
+- has_many :favorites
+- has_many :reviews_stamps
+- has_many :stamps, through: :reviews_stamps
+
+|column|type...|options|comment|
+|---|---|---|---|
+|user_id(FK)|integer|null: false||
+|store_id(FK)|integer|null: false||
+|product_category_id|integer|null: false||
+|product_name|string|null: false||
+|content|text|||
+|picture|string|||
+|price|integer|||
+|rating|integer|1~5||
+|stamp_count||
+
+### reviews_reactions(relation)
+
+- belogs_to :review
+- belogs_to :stamp
+
+|column|type|options|
+|---|---|---|
+|review_id(FK)|integer||
+|reaction_id(FK)|integer||
+
+### reactions
+投稿へのスタンプ
+
+- has_many :reviews_reactions
+- has_many :reviews, through: :reviews_reactions
+
+|column|type|options|
+|---|---|---|
+|name|string|||
 
 ### comments
-投稿へのコメントやつぶやき
+投稿へのコメント
 
-Model: **Comment**
 - belongs_to :user
-- belongs_to :micropost
+- belongs_to :review
+- has_many :replies, class: "Comment", foreign_key: "in_reply_to_id"
+- belongs_to :in_reply_to, class_name: "Comment"
+参考: https://railsguides.jp/association_basics.html (2.10自己結合)
+- belongs_to :in_reply_to_user, class_name: "User"
 
-|column|type...|options|
+|column|type...|options|comment|
+|---|---|---|---|
+|user_id(FK)|integer|||
+|review_id(FK)|integer|||
+|in_reply_to_id(FK)|integer||自己結合|
+|text|text|||
+|reply|boolean|||
+|in_reply_to_user_id(FK)|integer||リプライするコメントをしたユーザーを識別|
+|like_count|integer|||
+
+### likes(ポリモーフィックにするかも)
+レビューのコメントに対するいいね！
+
+|column|type|options|
 |---|---|---|
-|user_id(FK)|integer||
-|micropost_id(FK)|integer||
-|texr|text||
-|image|string||
-|type|integer|enum -> (0: normal,1: reply,2: tweet)|
+|comment_id(FK)|integer|unique|
+|user_id(FK)|integer|unique|
 
-### microposts_tags
+### reviews_tags
 メイン投稿とタグのリレーション
 
-Model: **MicropostTag**
-- belogs_to :micropost
+- belogs_to :review
 - belogs_to :tag
 
 |column|type...|options|
@@ -132,52 +197,39 @@ Model: **MicropostTag**
 |micropost_id(FK)|integer||
 |tag_id(FK)|integer||
 
-### tags(microposts)
-メイン投稿のタグ
+### tags(review)
+レビューのタグ
 
-Model: **Tag**
-- has_many :microposts_tags
-- has_many :microposts, through: :microposts_tags
+- has_many :reviews_tags
+- has_many :reviews, through: :reviews_tags
 
 |column|type|options|
 |---|---|---|
 |name|string|not null|
 
+### product_categories
+商品のカテゴリー
+
+- has_many :reviews
+
+|column|type...|options|comment|
+|---|---|---|---|
+|name|string|not null||
+
 ### favorites(WIP)
 お気に入り投稿
 
-Model: **Favorite**
 - belogs_to :user
 - belogs_to :micropost
 
 |column|type|options|
 |---|---|---|
 |user_id(FK)||
-|micropost_id(FK)||
-
-### replies(WIP)
-
-|column|type|options|
-|---|---|---|
-|from_user_id(FK)|integer||
-|to_user_id(FK)|integer||
-
-### micropost_likes
-投稿へのいいね！
-
-Model: **MicropostLike**
-- belogs_to :micropost
-- belogs_to :user
-
-|column|type|options|
-|---|---|---|
-|micropost_id(FK)|integer||
-|user_id(FK)|integer||
+|review_id(FK)||
 
 ### communities
 コミュニティ
 
-Model: **Community**
 - belogs_to :owner, class_name: "User"
 - belogs_to :category
 - has_many :community_conversations
@@ -185,27 +237,29 @@ Model: **Community**
 
 |column|type|options|
 |---|---|---|
-|name|string|not null|
-|description|text||
-|join_condition|integer|enum -> {0: public, 1: approval}|
-|image|string||
-|owner_id(FK)|integer||
-|category_id(FK)|integer||
+|title|string|not null|
+|description|text|not null|
+|permission_level|integer|enum -> {0: public, 1: approval}|
+|symbol_image|string||
+|owner_id(FK->users)|integer||
 
-### categories
-コミュニティのカテゴリー
+### community_tag_relations
 
-Model: **Category**
-- has_many :communities
+|column|type|options|
+|---|---|---|
+|community_id(FK)|integer|not null|
+|tag_id(FK)|integer||
+
+### community_tags
+コミュニティのタグ
 
 |column|type...|options|
 |---|---|---|
-|category_name|string|not null|
+|tag_name|string|not null|
 
-### community_conversations
+### comeets
 コミュニティに対する全体投稿
 
-Model: **CommunityConversation**
 - belogs_to :community
 - belogs_to :user
 
@@ -214,12 +268,20 @@ Model: **CommunityConversation**
 |community_id(FK)|integer||
 |user_id(FK)|integer||
 |message|text||
-|picture|string||
+|photo|string||
+|like_count|integer||
+
+### comeet_likes
+コミュニティのトピック内のメッセージに対するいいね！
+
+|column|type|options|
+|---|---|---|
+|topic_message_id(FK)|integer||
+|user_id(FK)|integer||
 
 ### topics
 コミュニティのトピック
 
-Model: **Topic**
 - belogs_to :community
 - belogs_to :owner, class_name: "User"
 - has_many :topic_messages
@@ -230,27 +292,23 @@ Model: **Topic**
 |title|string||
 |owner_id(FK user)|integer||
 
-### topic_messages
-コミュニティのトピック内のメッセージ
+### join_requests
+コミュニティへの参加申請情報
 
-Model: **TopicMessage**
-- belogs_to :user
-- belogs_to :topic
+|column|type|options||
+|---|---|---|---|
+|user_id(FK)|integer|||
+|community_id(FK)|integer|||
+|message|text|not null||
+|status|integer|申請の状況|default: 0, { 0: 未確認, 1: 承認, 2: 拒否 }|
 
-|column|type|options|
-|---|---|---|
-|user_id(FK)|integer||
-|topic_id(FK)|integer||
-|content|text||
-|picture|string||
+### community_members
+コミュニティのメンバー
 
-### topic_message_likes
-コミュニティのトピック内のメッセージに対するいいね！
-
-|column|type|options|
-|---|---|---|
-|topic_message_id(FK)|integer||
-|user_id(FK)|integer||
+|column|type|options||
+|---|---|---|---|
+|community_id(FK)|integer|||
+|member_id(FK users)|integer|||
 
 ### events(WIP)
 コミュニティのイベント
@@ -263,21 +321,3 @@ Model: **TopicMessage**
 |address|string||
 |capacity|integer||
 |description|text|詳細説明|
-
-### requests
-コミュニティへの参加申請情報
-
-|column|type|options|
-|---|---|---|
-|user_id(FK)|integer||
-|community_id(FK)|integer||
-|message|text|not null|
-
-### communities_members
-コミュニティのメンバー
-
-|column|type|options|
-|---|---|---|
-|community_id(FK)|integer||
-|member_id(FK users)|integer||
-|admitted|boolean|コミュニティへの参加承認|

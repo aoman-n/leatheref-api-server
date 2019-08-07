@@ -23,6 +23,7 @@ FactoryBot.define do
     price { 1000 }
     rating { 5 }
     association :user
+    # TODO: ここでえらーなる
     store_id { 1 }
     product_category_id { 1 }
   end

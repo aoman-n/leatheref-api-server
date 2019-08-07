@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_04_121017) do
+ActiveRecord::Schema.define(version: 2019_08_07_131407) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -157,6 +157,16 @@ ActiveRecord::Schema.define(version: 2019_08_04_121017) do
     t.index ["name"], name: "index_stores_on_name", unique: true
   end
 
+  create_table "topics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title", null: false
+    t.bigint "community_id"
+    t.bigint "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_topics_on_community_id"
+    t.index ["owner_id"], name: "index_topics_on_owner_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email"
     t.string "display_name"
@@ -203,5 +213,7 @@ ActiveRecord::Schema.define(version: 2019_08_04_121017) do
   add_foreign_key "reviews", "product_categories"
   add_foreign_key "reviews", "stores"
   add_foreign_key "reviews", "users"
+  add_foreign_key "topics", "communities"
+  add_foreign_key "topics", "users", column: "owner_id"
   add_foreign_key "users", "stores", column: "love_store_id"
 end

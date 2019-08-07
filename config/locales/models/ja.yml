@@ -7,6 +7,7 @@ ja:
       community: コミュニティ
       join_request: コミュニティ参加申請
       topic: トピック
+      comeet: コミート
     attributes:
       user:
         id: ID
@@ -42,3 +43,6 @@ ja:
         status: 申請状況
       topic:
         title: タイトル
+      comeet:
+        message: メッセージ
+        photo: 画像

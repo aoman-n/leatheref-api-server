@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_07_131407) do
+ActiveRecord::Schema.define(version: 2019_08_07_143444) do
+
+  create_table "comeets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.text "message", null: false
+    t.string "photo"
+    t.integer "like_count", default: 0
+    t.bigint "user_id"
+    t.string "comeetable_type"
+    t.bigint "comeetable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comeetable_type", "comeetable_id"], name: "index_comeets_on_comeetable_type_and_comeetable_id"
+    t.index ["user_id"], name: "index_comeets_on_user_id"
+  end
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -190,6 +203,7 @@ ActiveRecord::Schema.define(version: 2019_08_07_131407) do
     t.index ["love_store_id"], name: "index_users_on_love_store_id"
   end
 
+  add_foreign_key "comeets", "users"
   add_foreign_key "comments", "comments", column: "in_reply_to_id"
   add_foreign_key "comments", "reviews"
   add_foreign_key "comments", "users"

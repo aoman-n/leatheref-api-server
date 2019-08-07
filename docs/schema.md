@@ -260,12 +260,13 @@ Model: Store
 ### comeets
 コミュニティに対する全体投稿
 
-- belogs_to :community
+- belongs_to :community
+- belongs_to :topic
 - belogs_to :user
 
 |column|type|options|
 |---|---|---|
-|community_id(FK)|integer||
+|comeetable(FK)|integer||
 |user_id(FK)|integer||
 |message|text||
 |photo|string||

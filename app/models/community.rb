@@ -4,6 +4,7 @@ class Community < ApplicationRecord
   belongs_to :owner, class_name: "User"
   has_many :join_requests
   has_many :topics, dependent: :destroy
+  has_many :comeets, as: :comeetable
 
   mount_uploader :symbol_image, SymbolImageUploader
 

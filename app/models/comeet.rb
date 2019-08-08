@@ -4,4 +4,13 @@ class Comeet < ApplicationRecord
 
   validates :message, presence: true, length: { maximum: 500 }
   mount_uploader :photo, ComeetPhotoUploader
+
+  scope :recent, -> { order(created_at: :desc) }
+  scope :filter_community_id, -> (id) {
+    where(comeetable_id: id)
+  }
+
+  def photo_path
+    photo&.url
+  end
 end

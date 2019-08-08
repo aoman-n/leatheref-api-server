@@ -20,7 +20,9 @@ class CommunitiesController < ApplicationController
   end
 
   def show
-    # implement
+    @community = Community.where(id: params[:id]).eager_load(:owner).preload(:members)
+    response_not_found('Community') if @community.nil?
+    render json: @community, each_serializer: CommunityShowSerializer, include: ['owner', 'members']
   end
 
   def update
@@ -76,7 +78,9 @@ class CommunitiesController < ApplicationController
   end
 
   def community_member?
-    response_forbidden and return unless @community.member?(current_user)
+    if @community.approval? && !@community.member?(current_user)
+      response_forbidden
+    end
   end
 
   def community_owner?

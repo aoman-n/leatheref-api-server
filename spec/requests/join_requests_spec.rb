@@ -40,7 +40,7 @@ RSpec.describe 'JoinRequests', type: :request do
     end
   end
 
-  describe 'POST: /api/communities/:community_id/join_requests - リクエストの作成', focus: true do
+  describe 'POST: /api/communities/:community_id/join_requests - リクエストの作成' do
     let(:owner_user) { FactoryBot.create(:user, login_name: 'god') }
     let(:not_member_user) { FactoryBot.create(:user, login_name: 'shit') }
     let!(:member_user) { FactoryBot.create(:user, login_name: 'requeskun') }

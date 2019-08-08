@@ -1,13 +1,15 @@
 class CommunityComeetsController < ApplicationController
   before_action :authenticate!
-  before_action :set_community, only: %i(index show create)
+  before_action :set_community, only: %i(show create)
   before_action :set_comeet, only: %i(show destroy update)
   before_action :require_community_member, only: %i(create)
   before_action :comeet_owner?, only: %i(destroy update)
 
   def index
-    comeets = @community.comeets
-    render json: comeets
+    comeets = paginate Comeet.paginate(page: params[:page], per_page: params[:perpage])
+      .filter_community_id(params[:community_id])
+      .recent.eager_load(:user)
+    render json: comeets, each_serializer: ComeetSerializer, include: ['user']
   end
 
   def create

@@ -1,21 +1,3 @@
-# == Schema Information
-#
-# Table name: reviews
-#
-#  id                  :bigint           not null, primary key
-#  product_name        :string(255)      not null
-#  content             :text(65535)      not null
-#  picture             :string(255)
-#  price               :integer
-#  rating              :integer          not null
-#  stamp_count         :integer          default(0)
-#  user_id             :bigint
-#  store_id            :bigint
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  product_category_id :bigint
-#
-
 class Review < ApplicationRecord
   belongs_to :user
   belongs_to :store
@@ -39,8 +21,6 @@ class Review < ApplicationRecord
   validates_inclusion_of :rating, in: 1..10
   validate :picture_size
 
-  # default_scope { recent }
-
   scope :recent, -> { order(created_at: :desc) }
   scope :store_with, -> (store) {
     joins(:store).where(stores: { name: Store::QUERIES[store] })
@@ -54,12 +34,6 @@ class Review < ApplicationRecord
       .group("name, id")
       .select("reviews.*, reactions.name, COUNT(reviews.id) AS reaction_count, GROUP_CONCAT(review_reactions.user_id separator ',') AS user_ids")
   }
-  # scope :with_store?, -> (store) {
-  #   store ? store_with(store) : tap {}
-  # }
-  # scope :with_category?, -> (category_id) {
-  #   category_id ? category_with(category_id) : tap {}
-  # }
 
   def self.get_filtering_list(params)
     params.permit!.slice(:store, :category).to_hash.compact
@@ -75,9 +49,16 @@ class Review < ApplicationRecord
     picture.url
   end
 
+  def increment_comment_count
+    increment!(:comment_count)
+  end
+
+  def decrement_comment_count
+    decrement!(:comment_count)
+  end
+
   private
 
-  # アップロードされた画像のサイズをバリデーションする
   def picture_size
     if picture.size > 5.megabytes
       errors.add(:picture, "should be less than 5MB")

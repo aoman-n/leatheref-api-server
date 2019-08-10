@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: comments
-#
-#  id                  :bigint           not null, primary key
-#  user_id             :bigint
-#  review_id           :bigint
-#  in_reply_to_id      :bigint
-#  comment             :text(65535)      not null
-#  reply               :boolean          default(FALSE)
-#  in_reply_to_user_id :bigint
-#  like_count          :integer          default(0)
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#
-
 class Comment < ApplicationRecord
   belongs_to :user
   belongs_to :review
@@ -23,8 +7,8 @@ class Comment < ApplicationRecord
   has_many :likes, dependent: :destroy
 
   before_save :set_reply_to_user_id
-  after_save :increment_count
-  before_destroy :decrement_count
+  after_create :count_up
+  before_destroy :count_down
 
   validates :comment, presence: true, length: { maximum: 100 }
 
@@ -47,11 +31,11 @@ class Comment < ApplicationRecord
     end
   end
 
-  def increment_count
-    review.update_column(:comment_count, review.comment_count + 1)
+  def count_up
+    review.increment_comment_count
   end
 
-  def decrement_count
-    review.update_column(:comment_count, review.comment_count - 1)
+  def count_down
+    review.decrement_comment_count
   end
 end

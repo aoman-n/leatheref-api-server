@@ -20,9 +20,9 @@ class CommunitiesController < ApplicationController
   end
 
   def show
-    @community = Community.where(id: params[:id]).eager_load(:owner).preload(:members)
+    @community = Community.find_by(id: params[:id])
     response_not_found('Community') if @community.nil?
-    render json: @community, each_serializer: CommunityShowSerializer, include: ['owner', 'members']
+    render json: @community, serializer: CommunityShowSerializer
   end
 
   def update

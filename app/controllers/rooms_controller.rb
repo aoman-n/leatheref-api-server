@@ -3,11 +3,10 @@ class RoomsController < ApplicationController
   before_action :set_room, only: %i(show destroy leave)
   before_action :joined_user?, only: %i(show destroy leave)
 
+  # 参考: https://moneyforward.com/engineers_blog/2019/04/02/activerecord-includes-preload-eagerload/
+  # 参考: https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/adapters.md#include-option
   def index
-    # TODO: queryを無駄に発行しているため、最小限に抑える書き方を調べる。
-    # 参考: https://moneyforward.com/engineers_blog/2019/04/02/activerecord-includes-preload-eagerload/
     rooms = current_user.rooms.eager_load(newest_message: :sender).preload(:users)
-    # includeでネストに対応 -> 参考: https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/adapters.md#include-option
     render json: rooms, each_serializer: RoomSerializer,
            include: ['newst_message', 'users', 'newest_message.sender']
   end

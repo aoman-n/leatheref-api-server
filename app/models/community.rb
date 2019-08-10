@@ -2,9 +2,10 @@ class Community < ApplicationRecord
   has_many :community_members
   has_many :members, class_name: "User", through: :community_members
   belongs_to :owner, class_name: "User"
-  has_many :join_requests
+  has_many :join_requests, dependent: :destroy
   has_many :topics, dependent: :destroy
-  has_many :comeets, as: :comeetable
+  has_many :comeets, as: :comeetable, dependent: :destroy
+  has_many :latest_comeets, -> { limit(10) }, as: :comeetable, class_name: 'Comeet'
 
   mount_uploader :symbol_image, SymbolImageUploader
 

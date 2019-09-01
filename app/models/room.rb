@@ -8,7 +8,7 @@ class Room < ApplicationRecord
     order(updated_at: :desc)
   }, class_name: 'DirectMessage'
 
-  def current_user_exists?(current_user)
-    entries.exists?(user_id: current_user.id)
+  def user_exists?(target_user)
+    entries.exists?(user_id: target_user.id)
   end
 end

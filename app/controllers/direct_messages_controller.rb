@@ -25,7 +25,7 @@ class DirectMessagesController < ApplicationController
 
   def joined_user?
     @room = Room.find(params[:room_id])
-    unless @room.current_user_exists?(current_user)
+    unless @room.user_exists?(current_user)
       response_forbidden
     end
   end

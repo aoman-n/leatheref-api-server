@@ -19,7 +19,7 @@ class RoomsController < ApplicationController
 
   def create
     user_ids = [current_user.id].concat(JSON.parse(params[:user_ids]) || []).uniq
-    room = Room.new({ user_ids: user_ids })
+    room = Room.new(user_ids: user_ids)
     if room.save
       render json: room
     else
@@ -57,7 +57,7 @@ class RoomsController < ApplicationController
   end
 
   def joined_user?
-    unless @room.current_user_exists?(current_user)
+    unless @room.user_exists?(current_user)
       response_forbidden
     end
   end

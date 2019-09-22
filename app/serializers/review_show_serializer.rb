@@ -14,6 +14,7 @@ class ReviewShowSerializer < ActiveModel::Serializer
     attributes :id, :comment, :like_count, :created_at
     attribute :reply_count
     attribute :liked
+    belongs_to :user
 
     def reply_count
       object.replies.count

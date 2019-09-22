@@ -1,6 +1,6 @@
 class ReviewsController < ApplicationController
   before_action :authenticate!, only: %i(create destroy)
-  before_action :set_review, only: %i(show update destroy)
+  before_action :set_review, only: %i(update destroy)
   before_action :review_owner?, only: %i(update destroy)
 
   def index
@@ -25,10 +25,18 @@ class ReviewsController < ApplicationController
     )
   end
 
+  # TODO: N+1を解決する
   def show
-    render json: @review, serializer: ReviewShowSerializer, scope: {
-      'current_user': current_user,
-    }
+    review = Review.includes(comments: :user).find(params[:id])
+    if review.nil?
+      response_not_found('review')
+    end
+
+    render json: review, serializer: ReviewShowSerializer,
+           include: '**',
+           scope: {
+             'current_user': current_user,
+           }
   end
 
   def create

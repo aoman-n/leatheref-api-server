@@ -9,12 +9,12 @@ class SessionsController < ApplicationController
     else
       user = User.find_by(email: params[:email])
       if user.blank?
-        response_not_found(:user)
+        render status: 400, json: { message: I18n.t('sessions.create.failed') }
       elsif user.authenticate(params[:password]) && user.activated?
         j_token = create_token_for_login(user)
         render json: { token: j_token }
       else
-        response_unauthorized
+        render status: 401, json: { message: I18n.t('sessions.create.unauthorized') }
       end
     end
   end

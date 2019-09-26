@@ -1,0 +1,5 @@
+ja:
+  sessions:
+    create:
+      failed: 入力に誤りがあります。
+      unauthorized: 承認されてないユーザーです。メールをご確認ください。

@@ -36,7 +36,7 @@ module ResponseModule
   # 404 Not Found
   def response_not_found(class_name = nil)
     json = { type: 'Not Found' }
-    json.merge!({ message: "#{class_name.capitalize} Not Found" }) if class_name.pesent?
+    json.merge!({ message: "#{class_name.capitalize} Not Found" }) if class_name.present?
     render status: 404, json: json
   end
 

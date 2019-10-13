@@ -1,5 +1,5 @@
 class ReviewShowSerializer < ActiveModel::Serializer
-  attributes :id, :product_name, :content, :picture_path, :rating, :created_at
+  attributes :id, :product_name, :content, :picture_path, :rating, :created_at, :price
   attribute :store_name
   attribute :product_category_name
 

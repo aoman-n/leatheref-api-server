@@ -14,6 +14,10 @@
 Rails.application.routes.draw do
   root to: 'application#hello'
 
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: '/letter_opener'
+  end
+
   mount ActionCable.server => '/cable'
 
   require 'sidekiq/web'

@@ -5,7 +5,10 @@ class SessionsController < ApplicationController
       user = User.find_or_create_from_auth(request.env['omniauth.auth'])
       user.activate unless user.activated?
       j_token = create_token_for_login(user)
-      render json: { token: j_token }
+      # render json: { token: j_token }
+      # 各環境で読み込むconfigを作成する
+      front_base_url = 'http://localhost:3377/'
+      redirect_to front_base_url + "login?token=#{j_token}"
     else
       user = User.find_by(email: params[:email])
       if user.blank?

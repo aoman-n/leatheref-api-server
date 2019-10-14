@@ -22,5 +22,23 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :display_name, :login_name, :image_url
+  attributes :id, :display_name, :login_name
+  attributes :image_url, :follower_count, :following_count, :review_count
+  belongs_to :love_store
+
+  def image_url
+    object[:image_url]
+  end
+
+  def follower_count
+    object.followers.size
+  end
+
+  def following_count
+    object.following.size
+  end
+
+  def review_count
+    object.reviews.size
+  end
 end

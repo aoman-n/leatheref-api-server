@@ -23,7 +23,7 @@ class ReviewSerializer < ActiveModel::Serializer
   attribute :product_category_name
   attribute :reactions
 
-  belongs_to :user, serializer: UserSerializer
+  belongs_to :user
 
   def picture_path
     object.picture.url
@@ -35,6 +35,15 @@ class ReviewSerializer < ActiveModel::Serializer
       instance_options[:reaction_counts].map do |r|
         { name: r[:name], count: r[:count], reacted: r[:reacted] } if r[:review_id] == object.id
       end.compact
+    end
+  end
+
+  class UserSerializer < ActiveModel::Serializer
+    attributes :id, :display_name, :login_name
+    attribute :image_url
+
+    def image_url
+      object[:image_url]
     end
   end
 end

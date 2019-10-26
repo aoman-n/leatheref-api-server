@@ -41,7 +41,7 @@ class ReviewsController < ApplicationController
 
   def create
     review = Review.new(review_params)
-    if review.save
+    if review.save_with_pictures params[:pictures]
       render json: review, serializer: ReviewShowSerializer, include: '**', status: 201
     else
       response_bad_request
@@ -70,7 +70,6 @@ class ReviewsController < ApplicationController
     params.permit(
       :product_name,
       :content,
-      :picture,
       :price,
       :rating,
       :store_id,

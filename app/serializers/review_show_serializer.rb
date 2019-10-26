@@ -7,7 +7,7 @@ class ReviewShowSerializer < ActiveModel::Serializer
   has_many :without_reply_comments, key: :comments
 
   def picture_path
-    object.picture.url
+    object.review_pictures.map { |p| p.picture.url }
   end
 
   class CommentSerializer < ActiveModel::Serializer

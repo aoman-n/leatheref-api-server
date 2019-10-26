@@ -43,9 +43,18 @@ class Review < ApplicationRecord
     Review.page(page).per(per_page).recent
   end
 
-  # def picture_path
-  #   picture.url
-  # end
+  def save_with_pictures(pictures = [])
+    ActiveRecord::Base.transaction do
+      save!
+      createPictures! pictures
+    end
+
+    true
+  rescue => e
+    logger.error(e)
+
+    false
+  end
 
   def increment_comment_count
     increment!(:comment_count)
@@ -56,6 +65,12 @@ class Review < ApplicationRecord
   end
 
   private
+
+  def createPictures!(pictures)
+    pictures.each do |key, picture|
+      review_pictures.create!(picture: picture)
+    end
+  end
 
   def broadcast_new_review
     ReviewCreationEventBroadcastJob.perform_later(self)

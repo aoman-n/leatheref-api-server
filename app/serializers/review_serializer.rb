@@ -17,17 +17,13 @@
 #
 
 class ReviewSerializer < ActiveModel::Serializer
-  attributes :id, :product_name, :content, :comment_count, :picture_path, :created_at
+  attributes :id, :product_name, :content, :comment_count, :first_picture_url, :created_at
   attribute :rating
   attribute :store_name
   attribute :product_category_name
   attribute :reactions
 
   belongs_to :user
-
-  def picture_path
-    object.picture.url
-  end
 
   def reactions
     reactions = instance_options[:serialized_reaction_count_list]

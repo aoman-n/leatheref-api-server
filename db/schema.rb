@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_26_083456) do
+ActiveRecord::Schema.define(version: 2019_10_26_092541) do
 
   create_table "comeets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "message", null: false
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 2019_10_26_083456) do
   create_table "reviews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "product_name", null: false
     t.text "content", null: false
-    t.string "picture"
+    t.string "first_picture_url"
     t.integer "price"
     t.integer "rating", null: false
     t.integer "comment_count", default: 0

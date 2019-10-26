@@ -47,6 +47,7 @@ class Review < ApplicationRecord
     ActiveRecord::Base.transaction do
       save!
       createPictures! pictures
+      set_first_picture_url!
     end
 
     true
@@ -70,6 +71,10 @@ class Review < ApplicationRecord
     pictures.each do |key, picture|
       review_pictures.create!(picture: picture)
     end
+  end
+
+  def set_first_picture_url!
+    update!(first_picture_url: review_pictures.first.picture.url)
   end
 
   def broadcast_new_review

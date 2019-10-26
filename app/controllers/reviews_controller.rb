@@ -42,7 +42,7 @@ class ReviewsController < ApplicationController
   def create
     review = Review.new(review_params)
     if review.save
-      render json: review, status: 201
+      render json: review, serializer: ReviewShowSerializer, include: '**', status: 201
     else
       response_bad_request
     end

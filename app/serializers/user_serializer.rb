@@ -24,7 +24,7 @@
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :display_name, :login_name
   attributes :image_url, :follower_count, :following_count, :review_count
-  belongs_to :love_store
+  belongs_to :love_store, serializer: StoreSerializer
 
   def image_url
     object[:image_url]

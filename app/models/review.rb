@@ -7,10 +7,9 @@ class Review < ApplicationRecord
            class_name: 'Comment', dependent: :destroy
   has_many :review_reactions, dependent: :destroy
   has_many :reactions, through: :review_reactions
+  has_many :review_pictures, dependent: :destroy
 
   after_create_commit :broadcast_new_review
-
-  mount_uploader :picture, PictureUploader
 
   delegate :name, to: :store, prefix: true
   delegate :name, to: :product_category, prefix: true
@@ -19,7 +18,6 @@ class Review < ApplicationRecord
   validates :content, presence: true, length: { maximum: 500 }
   validates :rating, presence: true
   validates_inclusion_of :rating, in: 1..10
-  validate :picture_size
 
   scope :recent, -> { order(created_at: :desc) }
   scope :store_with, -> (store) {
@@ -45,9 +43,9 @@ class Review < ApplicationRecord
     Review.page(page).per(per_page).recent
   end
 
-  def picture_path
-    picture.url
-  end
+  # def picture_path
+  #   picture.url
+  # end
 
   def increment_comment_count
     increment!(:comment_count)
@@ -58,12 +56,6 @@ class Review < ApplicationRecord
   end
 
   private
-
-  def picture_size
-    if picture.size > 5.megabytes
-      errors.add(:picture, "should be less than 5MB")
-    end
-  end
 
   def broadcast_new_review
     ReviewCreationEventBroadcastJob.perform_later(self)

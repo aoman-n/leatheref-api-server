@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_07_143444) do
+ActiveRecord::Schema.define(version: 2019_10_26_083456) do
 
   create_table "comeets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "message", null: false
@@ -128,6 +128,14 @@ ActiveRecord::Schema.define(version: 2019_08_07_143444) do
     t.index ["name"], name: "index_reactions_on_name", unique: true
   end
 
+  create_table "review_pictures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "review_id"
+    t.string "picture", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["review_id"], name: "index_review_pictures_on_review_id"
+  end
+
   create_table "review_reactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "review_id"
     t.bigint "reaction_id"
@@ -221,6 +229,7 @@ ActiveRecord::Schema.define(version: 2019_08_07_143444) do
   add_foreign_key "join_requests", "users"
   add_foreign_key "likes", "comments"
   add_foreign_key "likes", "users"
+  add_foreign_key "review_pictures", "reviews", on_delete: :cascade
   add_foreign_key "review_reactions", "reactions"
   add_foreign_key "review_reactions", "reviews"
   add_foreign_key "review_reactions", "users"

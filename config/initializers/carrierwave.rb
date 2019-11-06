@@ -21,4 +21,11 @@ CarrierWave.configure do |config|
   when 'test'
     config.fog_directory  = Rails.application.credentials.S3_BUCKET
   end
+
+  if Rails.env.production?
+    # TODO: プロダクション用に書き換える
+    config.asset_host = 'https://production.com'
+  else
+    config.asset_host = 'http://localhost:3000'
+  end
 end

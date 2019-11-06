@@ -11,7 +11,7 @@ class BroadcastReviewSerializer < ActiveModel::Serializer
     object.picture.url
   end
 
-  # 新規レビューなので当然空になる
+  # 新規レビューなので空になる
   def reactions
     []
   end

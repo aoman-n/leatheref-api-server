@@ -170,6 +170,13 @@ reaction_name
 }
 ```
 
+```shell
+curl -X POST http://localhost:3000/api/reviews/47/comments \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo3LCJ0b2tlbiI6InpfLVlNd3lKS3l1MFZZaVdGck84ZlEifQ.S9FEhj4_TskHCi2r2LACOfBbAKTiw90uH54B6AL3OOs" \
+-H "Content-Type: Application/json" -d '{ "comment": "ほげコメント" }'
+```
+
+
 `DELETE /api/comments/:id`
 
 コメントの削除

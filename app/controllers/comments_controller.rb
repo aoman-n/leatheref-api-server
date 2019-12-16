@@ -1,12 +1,16 @@
 class CommentsController < ApplicationController
   before_action :authenticate!, only: %i(create destroy update)
-  before_action :set_review, only: %i(index create)
+  before_action :set_review, only: :create
   before_action :set_comment, only: %i(replies destroy update)
   before_action :comment_owner?, only: %i(destroy update)
 
   def index
-    comments = @review.without_reply_comments
-    render json: comments
+    comments = Comment
+      .where(review_id: params[:review_id], reply: 'false')
+      .includes(:user)
+    render json: comments, each_serializer: CommentSerializer,
+           scope: { 'current_user': current_user },
+           include: ['user']
   end
 
   def replies

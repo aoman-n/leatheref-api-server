@@ -41,15 +41,32 @@ class UsersController < ApplicationController
   end
 
   def following
-    user = User.find(params[:login_name])
+    user = User.find_by(login_name: params[:login_name])
     users = paginate user.following.page(params[:page] ||= 1).per(params[:per_page] ||= 10)
     render json: users, each_serializer: UserSerializer
   end
 
   def followers
-    user = User.find(params[:login_name])
+    user = User.find_by(login_name: params[:login_name])
     users = paginate user.followers.page(params[:page] ||= 1).per(params[:per_page] ||= 10)
     render json: users, each_serializer: UserSerializer
+  end
+
+  def reviews
+    reviews = paginate Review.base_active_record(
+      page: params[:page],
+      per_page: params[:per_page]
+    ).user_with(params[:login_name]).eager_load(:user, :store, :product_category)
+
+    serialized_reaction_count_list = Reaction.serialize_counts(Review.reaction_counts(reviews.map(&:id)))
+
+    render json: ActiveModel::Serializer::CollectionSerializer.new(
+      reviews,
+      serializer: ReviewSerializer,
+      current_user: current_user,
+      serialized_reaction_count_list: serialized_reaction_count_list,
+      include: ['user', 'store', 'product_category']
+    )
   end
 
   def search

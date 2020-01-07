@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     resources :users, only: [:create, :update, :show], param: :login_name, shallow: true do
       get :following, on: :member
       get :followers, on: :member
+      get :reviews, on: :member
       get :search, on: :collection
       collection do
         get 'me'

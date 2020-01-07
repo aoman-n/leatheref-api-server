@@ -26,6 +26,9 @@ class Review < ApplicationRecord
   scope :category_with, -> (category_id) {
     joins(:product_category).where(product_categories: { id: category_id })
   }
+  scope :user_with, -> (user_login_name) {
+    joins(:user).where(users: { login_name: user_login_name })
+  }
   scope :reaction_counts, -> (review_ids) {
     where(id: review_ids)
       .joins(:reactions)

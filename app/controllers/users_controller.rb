@@ -11,6 +11,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    user = User.find_by(login_name: params[:login_name])
+    if user.present?
+      render json: user
+    else
+      response_not_found('user')
+    end
+  end
+
   # PATCH /api/users/:id MEMO: 「:id」は使用してないためurlにも必要ないかも
   # TODO: 修正
   # user情報をupdateするときに、コールバックでimage_urlを更新するとよさそう。トランザクション内でimage_urlをアップデートさせるため。
@@ -32,13 +41,13 @@ class UsersController < ApplicationController
   end
 
   def following
-    user = User.find(params[:id])
+    user = User.find(params[:login_name])
     users = paginate user.following.page(params[:page] ||= 1).per(params[:per_page] ||= 10)
     render json: users, each_serializer: UserSerializer
   end
 
   def followers
-    user = User.find(params[:id])
+    user = User.find(params[:login_name])
     users = paginate user.followers.page(params[:page] ||= 1).per(params[:per_page] ||= 10)
     render json: users, each_serializer: UserSerializer
   end

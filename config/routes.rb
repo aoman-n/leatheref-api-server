@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     post '/login', to: 'sessions#create'
     delete '/logout', to: 'sessions#destroy'
 
-    resources :users, only: [:create, :update], shallow: true do
+    resources :users, only: [:create, :update, :show], param: :login_name, shallow: true do
       get :following, on: :member
       get :followers, on: :member
       get :search, on: :collection

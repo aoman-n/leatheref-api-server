@@ -22,7 +22,7 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :display_name, :login_name
+  attributes :id, :display_name, :login_name, :profile
   attributes :image_url, :follower_count, :following_count, :review_count
   belongs_to :love_store, serializer: StoreSerializer
 
@@ -40,5 +40,9 @@ class UserSerializer < ActiveModel::Serializer
 
   def review_count
     object.reviews.size
+  end
+
+  def profile
+    object.profile || ""
   end
 end

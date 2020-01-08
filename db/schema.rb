@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_02_025312) do
+ActiveRecord::Schema.define(version: 2020_01_08_155007) do
 
   create_table "comeets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "message", null: false
@@ -207,6 +207,7 @@ ActiveRecord::Schema.define(version: 2020_01_02_025312) do
     t.string "image_url"
     t.string "image"
     t.bigint "love_store_id"
+    t.text "profile"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["login_name"], name: "index_users_on_login_name", unique: true
     t.index ["love_store_id"], name: "index_users_on_love_store_id"

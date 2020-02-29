@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'mysql2', '>= 0.3.18', '< 0.6.0'
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2'
 gem 'redis', '~> 4.0'
 gem 'redis-namespace', '~> 1.5'

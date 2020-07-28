@@ -260,7 +260,7 @@ GEM
       concurrent-ruby (~> 1.0)
     ipaddress (0.8.3)
     jaro_winkler (1.5.2)
-    json (2.2.0)
+    json (2.3.1)
     jsonapi-renderer (0.2.2)
     jwt (2.2.1)
     kaminari (1.1.1)
